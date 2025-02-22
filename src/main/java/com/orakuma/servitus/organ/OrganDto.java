@@ -1,6 +1,5 @@
 package com.orakuma.servitus.organ;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,6 +14,6 @@ public record OrganDto(Long id, String name, String note, Map<String, String> at
 
     @Override
     public Map<String, String> attributes() {
-        return Collections.unmodifiableMap(attributes);
+        return new LinkedHashMap<>(attributes);
     }
 }

@@ -7,13 +7,14 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name ="servis")
-@EqualsAndHashCode(exclude = "units")
+@EqualsAndHashCode(exclude = {"units", "requisites"})
+@ToString
+@Getter
+@Setter
 public class Servis implements Serializable {
     private static final long serialVersionUID = 946132719596728289L;
     @Id
@@ -25,18 +26,24 @@ public class Servis implements Serializable {
     private String name;
     private Double price;
     @Enumerated(EnumType.STRING)
-    private ServisType itemType;
+    private ServisType servisType;
     private String additionalDetails;
     private LocalDate created;
-    private LocalDate changeDate;
+    private LocalDate modified;
     private Boolean active;
-    @ManyToMany
+    private String requester;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "servis_unit",
             joinColumns = @JoinColumn(name = "servis_id"),
             inverseJoinColumns = @JoinColumn(name = "unit_id")
     )
     private Set<Unit> units = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "requisites", joinColumns = @JoinColumn(name = "servis_id"))
+    @MapKeyColumn(name = "position")
+    @Column(name = "title")
+    private Map<Integer, String> requisites = new LinkedHashMap<>();
 
     public Servis() {
     }
@@ -51,68 +58,8 @@ public class Servis implements Serializable {
         unit.getServisSet().remove(this);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public ServisType getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(ServisType itemType) {
-        this.itemType = itemType;
-    }
-
-    public String getAdditionalDetails() {
-        return additionalDetails;
-    }
-
-    public void setAdditionalDetails(String additionalDetails) {
-        this.additionalDetails = additionalDetails;
-    }
-
-    public LocalDate getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDate created) {
-        this.created = created;
-    }
-
-    public LocalDate getChangeDate() {
-        return changeDate;
-    }
-
-    public void setChangeDate(LocalDate changeDate) {
-        this.changeDate = changeDate;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
+    public Map<Integer, String> getRequisites() {
+        return new LinkedHashMap<>(this.requisites);
     }
 
     public void setUnits(Set<Unit> units) {
@@ -124,5 +71,14 @@ public class Servis implements Serializable {
 
     public Set<Unit> getUnits() {
         return Collections.unmodifiableSet(this.units);
+    }
+
+    public Servis setRequisites(Map<Integer, String> requisites) {
+        if (requisites == null) {
+            this.requisites = new LinkedHashMap<>();
+        } else {
+            this.requisites = new LinkedHashMap<>(requisites);
+        }
+        return this;
     }
 }

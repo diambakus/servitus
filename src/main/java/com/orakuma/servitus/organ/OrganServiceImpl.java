@@ -1,26 +1,30 @@
 package com.orakuma.servitus.organ;
 
-import com.orakuma.servitus.organ.exceptions.OrganNotFoundException;
+import com.orakuma.servitus.utils.RepositoriesHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Service
 @Transactional
 public class OrganServiceImpl implements OrganService {
 
-    private final OrganRepository organRepository;
-    private final OrganMapper     organMapper;
+    private final OrganRepository     organRepository;
+    private final OrganMapper         organMapper;
+    private final RepositoriesHandler repositoriesHandler;
 
-    public OrganServiceImpl(final OrganRepository organRepository, final OrganMapper organMapper) {
+    public OrganServiceImpl(
+                            final OrganRepository organRepository,
+                            final OrganMapper organMapper,
+                            final RepositoriesHandler repositoriesHandler
+    ) {
         this.organRepository = organRepository;
         this.organMapper = organMapper;
+        this.repositoriesHandler = repositoriesHandler;
     }
 
     @Override
@@ -70,16 +74,22 @@ public class OrganServiceImpl implements OrganService {
     }
 
     @Override
-    public Optional<OrganDto> saveAttributes(Long id, Map<String, String> attributes) {
-        Organ organ = fetchOrganById(id);
-        attributes.forEach((key, value) -> {
-            organ.getAttributes().put(key, value);
+    public Optional<OrganDto> saveAttributes(Long id, Map<String, String> newAttributes) {
+        Organ organ = repositoriesHandler.getOrganById(id);
+
+        newAttributes.forEach((key, value) -> {
+            if (!value.equals(organ.getAttributes().get(key))) {
+                organ.getAttributes().put(key, value);
+            }
         });
-        return Optional.empty();
+
+        organ.setModified(LocalDate.now());
+        Organ persisted = organRepository.save(organ);
+        return Optional.ofNullable(organMapper.toOrganDto(persisted));
     }
 
     private Organ makeInactive(Long organId) {
-        Organ organ = fetchOrganById(organId);
+        Organ organ = repositoriesHandler.getOrganById(organId);
         organ.setActive(false);
         organ.setModified(LocalDate.now());
         organRepository.save(organ);
@@ -87,25 +97,17 @@ public class OrganServiceImpl implements OrganService {
     }
 
     @Override
-    public OrganDto updateOrganWithProperties(Long id, Map<String, String> fieldsContentMap) {
-        Organ organ = fetchOrganById(id);
+    public OrganDto updateOrganWithProperties(Long id, Map<String, String> newAttributes) {
+        Organ organ = repositoriesHandler.getOrganById(id);
 
-        LinkedHashMap<String, String> attributesAndValues = Stream
-                .concat(fieldsContentMap.entrySet().stream(), organ.getAttributes().entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, LinkedHashMap::new));
-
-        organ.setAttributes(attributesAndValues);
-        Organ updatedOrgan = organRepository.save(organ);
-        OrganDto updatedOrganDto = organMapper.toOrganDto(updatedOrgan);
-        return updatedOrganDto;
-    }
-
-    private Organ fetchOrganById(Long organId) {
-        Organ organ = organRepository.findById(organId).orElseThrow(() -> {
-            String errorMessage = String.format("Organ with id %s not found", organId);
-            return new OrganNotFoundException(errorMessage);
+        newAttributes.forEach((key, value) -> {
+            if (!value.equals(organ.getAttributes().get(key))) {
+                organ.getAttributes().put(key, value);
+            }
         });
-        return organ;
-    }
 
+        organ.setModified(LocalDate.now());
+        Organ updatedOrgan = organRepository.save(organ);
+        return organMapper.toOrganDto(updatedOrgan);
+    }
 }

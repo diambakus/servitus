@@ -1,0 +1,6 @@
+<FindBugsFilter>
+    <Match>
+        <Class name="com.orakuma.servitus.servis.ServisController" />
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+</FindBugsFilter>

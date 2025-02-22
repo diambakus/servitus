@@ -6,6 +6,9 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="1" author="adruida">
+        <!-- Create the sequence for the organs table -->
+        <createSequence sequenceName="org_seq" startValue="1" incrementBy="1"/>
+
         <!-- Create the organs table -->
         <createTable tableName="organs">
             <column name="id" type="BIGINT">
@@ -20,11 +23,15 @@
             <column name="active" type="BOOLEAN"/>
         </createTable>
 
-        <!-- Create the sequence for the organs table -->
-        <createSequence sequenceName="org_seq" startValue="1" incrementBy="1"/>
+        <!-- Add a default value for the id column using the sequence -->
+        <addDefaultValue
+                tableName="organs"
+                columnName="id"
+                defaultValueComputed="NEXT VALUE FOR org_seq"
+                columnDataType="BIGINT"/>
 
         <!-- Create the organization_attributes table -->
-        <createTable tableName="organization_attributes">
+        <createTable tableName="organ_attributes">
             <column name="organ_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
@@ -35,7 +42,7 @@
         </createTable>
 
         <!-- Add foreign key constraint to organization_attributes table -->
-        <addForeignKeyConstraint baseTableName="organization_attributes"
+        <addForeignKeyConstraint baseTableName="organ_attributes"
                                  baseColumnNames="organ_id"
                                  constraintName="fk_organ_attributes"
                                  referencedTableName="organs"

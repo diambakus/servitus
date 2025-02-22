@@ -25,7 +25,7 @@ spring:
       ddl-auto: update
   sql:
     init:
-      mode: never
+      mode: always
   liquibase:
     enabled: true
   datasource:
@@ -47,6 +47,7 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
 springdoc:
   swagger-ui:
     path: swagger-ui.html

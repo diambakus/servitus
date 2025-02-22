@@ -7,6 +7,10 @@
 
     <!-- Create the units table -->
     <changeSet id="1" author="adruida">
+
+        <!-- Create the sequence for the unit table -->
+        <createSequence sequenceName="unit_seq" startValue="1" incrementBy="1"/>
+
         <createTable tableName="units">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
@@ -22,9 +26,11 @@
             <column name="modified" type="DATE"/>
             <column name="active" type="BOOLEAN"/>
         </createTable>
-
-        <!-- Create the sequence for the unit table -->
-        <createSequence sequenceName="unit_seq" startValue="1" incrementBy="1"/>
+        <addDefaultValue
+                tableName="units"
+                columnName="id"
+                defaultValueComputed="NEXT VALUE FOR unit_seq"
+                columnDataType="BIGINT"/>
 
         <!-- Add foreign key constraint for fk_organ -->
         <addForeignKeyConstraint

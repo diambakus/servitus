@@ -5,8 +5,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <!-- Create the units table -->
     <changeSet id="1" author="adruida">
+        <createSequence sequenceName="servis_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <!-- Create the units table -->
+    <changeSet id="2" author="adruida">
         <createTable tableName="servis">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
@@ -14,17 +18,34 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints unique="true" nullable="false"/>
             </column>
+            <column name="requester" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="price" type="DECIMAL(10,2)"/>
-            <column name="item_type" type="VARCHAR(50)"/>
+            <column name="servis_type" type="VARCHAR(50)"/>
             <column name="additional_details" type="TEXT"/>
             <column name="created" type="DATE"/>
-            <column name="change_date" type="DATE"/>
+            <column name="modified" type="DATE"/>
             <column name="active" type="BOOLEAN"/>
         </createTable>
+        <addDefaultValue
+                tableName="servis"
+                columnName="id"
+                defaultValueComputed="NEXT VALUE FOR org_seq"
+                columnDataType="BIGINT"/>
     </changeSet>
 
-    <changeSet id="2" author="adruida">
-        <createSequence sequenceName="servis_seq" startValue="1" incrementBy="1"/>
+    <changeSet id="3" author="adruida">
+        <createTable tableName="requisites">
+            <column name="servis_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_requisites_servis" references="servis(id)"/>
+            </column>
+            <column name="position" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/>
+        </createTable>
+        <addPrimaryKey tableName="requisites" columnNames="servis_id, position" />
     </changeSet>
 
 </databaseChangeLog>

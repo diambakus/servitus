@@ -8,3 +8,9 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.xml
   application:
     name: servitus
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

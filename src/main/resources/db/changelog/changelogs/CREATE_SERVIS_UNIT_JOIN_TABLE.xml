@@ -29,7 +29,7 @@
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
 
-        <addForeignKeyConstraint constraintName="fk_servis_unit_unit"
+        <addForeignKeyConstraint constraintName="fk_servis_unit_units"
                                  baseTableName="servis_unit"
                                  baseColumnNames="unit_id"
                                  referencedTableName="units"
