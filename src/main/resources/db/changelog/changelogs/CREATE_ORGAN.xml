@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="adruida">
+        <!-- Create the organs table -->
+        <createTable tableName="organs">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="note" type="CLOB"/>
+            <column name="created" type="DATE"/>
+            <column name="modified" type="DATE"/>
+            <column name="active" type="BOOLEAN"/>
+        </createTable>
+
+        <!-- Create the sequence for the organs table -->
+        <createSequence sequenceName="org_seq" startValue="1" incrementBy="1"/>
+
+        <!-- Create the organization_attributes table -->
+        <createTable tableName="organization_attributes">
+            <column name="organ_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property_value" type="VARCHAR(255)"/>
+        </createTable>
+
+        <!-- Add foreign key constraint to organization_attributes table -->
+        <addForeignKeyConstraint baseTableName="organization_attributes"
+                                 baseColumnNames="organ_id"
+                                 constraintName="fk_organ_attributes"
+                                 referencedTableName="organs"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

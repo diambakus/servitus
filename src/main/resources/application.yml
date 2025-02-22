@@ -1,0 +1,10 @@
+server:
+  port: 8088
+
+spring:
+  devtools:
+    add-properties: false
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+  application:
+    name: servitus

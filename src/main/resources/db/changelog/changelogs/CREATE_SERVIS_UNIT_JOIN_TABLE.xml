@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Create the units table -->
+    <changeSet id="1" author="adruida">
+        <createTable tableName="servis_unit">
+            <column name="servis_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="adruida">
+        <addPrimaryKey columnNames="servis_id, unit_id" constraintName="pk_servis_unit" tableName="servis_unit"/>
+    </changeSet>
+
+    <changeSet id="3" author="adruida">
+        <addForeignKeyConstraint constraintName="fk_servis_unit_servis"
+                                 baseTableName="servis_unit"
+                                 baseColumnNames="servis_id"
+                                 referencedTableName="servis"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fk_servis_unit_unit"
+                                 baseTableName="servis_unit"
+                                 baseColumnNames="unit_id"
+                                 referencedTableName="units"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>

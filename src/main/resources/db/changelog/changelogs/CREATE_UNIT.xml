@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Create the units table -->
+    <changeSet id="1" author="adruida">
+        <createTable tableName="units">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="note" type="CLOB"/>
+            <column name="fk_organ" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created" type="DATE"/>
+            <column name="modified" type="DATE"/>
+            <column name="active" type="BOOLEAN"/>
+        </createTable>
+
+        <!-- Create the sequence for the unit table -->
+        <createSequence sequenceName="unit_seq" startValue="1" incrementBy="1"/>
+
+        <!-- Add foreign key constraint for fk_organ -->
+        <addForeignKeyConstraint
+                baseTableName="units"
+                baseColumnNames="fk_organ"
+                constraintName="fk_unit_organ"
+                referencedTableName="organs"
+        referencedColumnNames="id"
+        onDelete="SET NULL"
+        onUpdate="CASCADE"/>
+
+        <!-- Create the unit_attributes table -->
+        <createTable tableName="unit_attributes">
+            <column name="unit_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property_value" type="VARCHAR(255)"/>
+        </createTable>
+
+        <!-- Add primary key constraint for unit_attributes -->
+        <addPrimaryKey
+                tableName="unit_attributes"
+                columnNames="unit_id, property"
+                constraintName="pk_unit_attributes"/>
+
+        <!-- Add foreign key constraint for unit_id -->
+        <addForeignKeyConstraint
+                baseTableName="unit_attributes"
+                baseColumnNames="unit_id"
+                constraintName="fk_unit_attributes_unit"
+                referencedTableName="units"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>

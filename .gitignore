@@ -1,0 +1,14 @@
+.mvn
+# Ignore all .class
+*.class
+# Ignore all .log
+*.log
+.prefs
+*.lst
+.classpath
+.project
+*MapperImpl.java
+.settings
+target
+*.sql
+.idea

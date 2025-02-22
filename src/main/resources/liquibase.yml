@@ -1,0 +1,5 @@
+url: jdbc:h2:mem:testdb
+username: sa
+password:
+changeLogFile: src/main/resources/db/changelog/db.changelog-master.yaml
+referenceUrl: hibernate:spring:orakuma.model?dialect=org.hibernate.dialect.H2Dialect&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
