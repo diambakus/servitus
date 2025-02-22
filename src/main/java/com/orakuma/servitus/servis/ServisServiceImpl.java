@@ -7,7 +7,7 @@ public class ServisServiceImpl implements ServisService {
     private final ServisRepository servisRepository;
     private final ServisMapper servisMapper;
 
-    public ServisServiceImpl(ServisRepository servisRepository, ServisMapper servisMapper) {
+    public ServisServiceImpl(final ServisRepository servisRepository, final ServisMapper servisMapper) {
         this.servisRepository = servisRepository;
         this.servisMapper = servisMapper;
     }
