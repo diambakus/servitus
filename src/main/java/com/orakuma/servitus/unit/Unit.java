@@ -33,7 +33,7 @@ public class Unit implements Serializable {
     private LocalDate created;
     private LocalDate modified;
     private Boolean   active;
-    @ManyToMany(mappedBy = "units")
+    @ManyToMany(mappedBy = "units", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Servis> servisSet = new HashSet<>();
 
     public Unit(){
@@ -72,7 +72,7 @@ public class Unit implements Serializable {
     }
 
     public Set<Servis> getServisSet() {
-        return Collections.unmodifiableSet(servisSet);
+        return new HashSet<>(servisSet);
     }
 
     public void setId(Long id) {

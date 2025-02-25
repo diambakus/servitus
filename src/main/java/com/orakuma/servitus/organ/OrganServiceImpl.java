@@ -1,6 +1,6 @@
 package com.orakuma.servitus.organ;
 
-import com.orakuma.servitus.organ.exceptions.OrganNotFoundException;
+import com.orakuma.servitus.utils.RepositoriesHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +15,18 @@ import java.util.stream.Stream;
 @Transactional
 public class OrganServiceImpl implements OrganService {
 
-    private final OrganRepository organRepository;
-    private final OrganMapper     organMapper;
+    private final OrganRepository     organRepository;
+    private final OrganMapper         organMapper;
+    private final RepositoriesHandler repositoriesHandler;
 
-    public OrganServiceImpl(final OrganRepository organRepository, final OrganMapper organMapper) {
+    public OrganServiceImpl(
+                            final OrganRepository organRepository,
+                            final OrganMapper organMapper,
+                            final RepositoriesHandler repositoriesHandler
+    ) {
         this.organRepository = organRepository;
         this.organMapper = organMapper;
+        this.repositoriesHandler = repositoriesHandler;
     }
 
     @Override
@@ -71,7 +77,7 @@ public class OrganServiceImpl implements OrganService {
 
     @Override
     public Optional<OrganDto> saveAttributes(Long id, Map<String, String> attributes) {
-        Organ organ = fetchOrganById(id);
+        Organ organ = repositoriesHandler.getOrganById(id);
         attributes.forEach((key, value) -> {
             organ.getAttributes().put(key, value);
         });
@@ -79,7 +85,7 @@ public class OrganServiceImpl implements OrganService {
     }
 
     private Organ makeInactive(Long organId) {
-        Organ organ = fetchOrganById(organId);
+        Organ organ = repositoriesHandler.getOrganById(organId);
         organ.setActive(false);
         organ.setModified(LocalDate.now());
         organRepository.save(organ);
@@ -88,7 +94,7 @@ public class OrganServiceImpl implements OrganService {
 
     @Override
     public OrganDto updateOrganWithProperties(Long id, Map<String, String> fieldsContentMap) {
-        Organ organ = fetchOrganById(id);
+        Organ organ = repositoriesHandler.getOrganById(id);
 
         LinkedHashMap<String, String> attributesAndValues = Stream
                 .concat(fieldsContentMap.entrySet().stream(), organ.getAttributes().entrySet().stream())
@@ -99,13 +105,4 @@ public class OrganServiceImpl implements OrganService {
         OrganDto updatedOrganDto = organMapper.toOrganDto(updatedOrgan);
         return updatedOrganDto;
     }
-
-    private Organ fetchOrganById(Long organId) {
-        Organ organ = organRepository.findById(organId).orElseThrow(() -> {
-            String errorMessage = String.format("Organ with id %s not found", organId);
-            return new OrganNotFoundException(errorMessage);
-        });
-        return organ;
-    }
-
 }

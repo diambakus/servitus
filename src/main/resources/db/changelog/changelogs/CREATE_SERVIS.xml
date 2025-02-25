@@ -15,7 +15,7 @@
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="price" type="DECIMAL(10,2)"/>
-            <column name="item_type" type="VARCHAR(50)"/>
+            <column name="servis_type" type="VARCHAR(50)"/>
             <column name="additional_details" type="TEXT"/>
             <column name="created" type="DATE"/>
             <column name="change_date" type="DATE"/>

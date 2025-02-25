@@ -25,12 +25,12 @@ public class Servis implements Serializable {
     private String name;
     private Double price;
     @Enumerated(EnumType.STRING)
-    private ServisType itemType;
+    private ServisType servisType;
     private String additionalDetails;
     private LocalDate created;
     private LocalDate changeDate;
     private Boolean active;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "servis_unit",
             joinColumns = @JoinColumn(name = "servis_id"),
@@ -75,12 +75,12 @@ public class Servis implements Serializable {
         this.price = price;
     }
 
-    public ServisType getItemType() {
-        return itemType;
+    public ServisType getServisType() {
+        return servisType;
     }
 
-    public void setItemType(ServisType itemType) {
-        this.itemType = itemType;
+    public void setServisType(ServisType servisType) {
+        this.servisType = servisType;
     }
 
     public String getAdditionalDetails() {

@@ -1,20 +1,34 @@
 package com.orakuma.servitus.servis;
 
+import com.orakuma.servitus.unit.Unit;
+import com.orakuma.servitus.utils.RepositoriesHandler;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-@Service
-public class ServisServiceImpl implements ServisService {
-    private final ServisRepository servisRepository;
-    private final ServisMapper servisMapper;
+import java.time.LocalDate;
+import java.util.*;
 
-    public ServisServiceImpl(final ServisRepository servisRepository, final ServisMapper servisMapper) {
+@Service
+@Transactional
+public class ServisServiceImpl implements ServisService {
+    private final ServisRepository    servisRepository;
+    private final ServisMapper        servisMapper;
+    private final RepositoriesHandler repositoriesHandler;
+
+    public ServisServiceImpl(
+            final ServisRepository servisRepository,
+            final ServisMapper servisMapper,
+            final RepositoriesHandler repositoriesHandler
+    ) {
         this.servisRepository = servisRepository;
         this.servisMapper = servisMapper;
+        this.repositoriesHandler = repositoriesHandler;
     }
 
     @Override
     public ServisDto get(Long servisId) {
-        return null;
+        Servis servis = repositoriesHandler.getServisById(servisId);
+        return servisMapper.toServisDto(servis);
     }
 
     @Override
@@ -24,7 +38,20 @@ public class ServisServiceImpl implements ServisService {
 
     @Override
     public ServisDto create(ServisDto servisDto) {
-        return null;
+        Servis servis = servisMapper.toServis(servisDto);
+
+        servisDto.unitsDto().forEach(unitDto -> {
+            Unit unit = repositoriesHandler.getUnitById(unitDto.id());
+            if (unit != null) {
+                servis.addUnit(unit);
+            }
+        });
+
+        servis.setCreated(LocalDate.now());
+        servis.setActive(true);
+
+        Servis persistedServis = servisRepository.save(servis);
+        return servisMapper.toServisDto(persistedServis);
     }
 
     @Override
@@ -34,11 +61,10 @@ public class ServisServiceImpl implements ServisService {
 
     @Override
     public void delete(Long servisId) {
-
     }
 
     @Override
-    public Iterable<ServisDto> getByUnit(Long unitId) {
+    public List<ServisDto> getByUnit(Long unitId) {
         return null;
     }
 
