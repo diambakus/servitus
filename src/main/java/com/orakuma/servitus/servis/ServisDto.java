@@ -3,6 +3,7 @@ package com.orakuma.servitus.servis;
 import com.orakuma.servitus.unit.UnitDto;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public record ServisDto(
@@ -25,6 +26,6 @@ public record ServisDto(
 
     @Override
     public Set<UnitDto> unitsDto() {
-        return Collections.unmodifiableSet(unitsDto);
+        return new HashSet<>(unitsDto);
     }
 }

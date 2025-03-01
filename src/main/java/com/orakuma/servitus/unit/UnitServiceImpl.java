@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 public class UnitServiceImpl implements UnitService {
     private final UnitRepository      repository;
     private final UnitMapper          mapper;
-    private final OrganRepository     organRepository;
     private final OrganMapper         organMapper;
     private final UnitRepository      unitRepository;
     private final RepositoriesHandler repositoriesHandler;
@@ -32,7 +31,6 @@ public class UnitServiceImpl implements UnitService {
                            final UnitRepository unitRepository, final RepositoriesHandler repositoriesHandler
     ) {
         this.repository = repository;
-        this.organRepository = organRepository;
         this.mapper = mapper;
         this.organMapper = organMapper;
         this.unitRepository = unitRepository;
@@ -56,6 +54,7 @@ public class UnitServiceImpl implements UnitService {
             LOG.error("The unit organization is Null.");
             return Optional.empty();
         }
+
         Organ organ = repositoriesHandler.getOrganById(unitDto.organDto().id());
         unit.setOrgan(organ);
         unit.setActive(true);

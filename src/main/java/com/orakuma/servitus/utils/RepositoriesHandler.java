@@ -24,26 +24,23 @@ public class RepositoriesHandler {
     }
 
     public Organ getOrganById(Long id){
-        Organ organ = organRepository.findById(id).orElseThrow(() -> {
+        return organRepository.findById(id).orElseThrow(() -> {
             String errorMessage = String.format("Organ with id %s not found", id);
             return new OrganNotFoundException(errorMessage);
         });
-        return organ;
     }
 
     public Servis getServisById(Long id){
-        Servis servis = servisRepository.findById(id).orElseThrow(() -> {
+        return servisRepository.findById(id).orElseThrow(() -> {
             String errorMessage = String.format("Servis with id %s not found", id);
             return new ServisNotFoundException(errorMessage);
         });
-        return servis;
     }
 
     public Unit getUnitById(Long id) {
-        Unit unit = unitRepository.findById(id).orElseThrow(() -> {
+        return unitRepository.findById(id).orElseThrow(() -> {
             String errorMessage = String.format("Unit with id %s not found", id);
             return new UnitNotFoundException(errorMessage);
         });
-        return unit;
     }
 }

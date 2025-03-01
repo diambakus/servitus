@@ -65,11 +65,11 @@ public class ServisServiceImpl implements ServisService {
 
     @Override
     public List<ServisDto> getByUnit(Long unitId) {
-        return null;
+        return servisMapper.toServisDtos(servisRepository.findAllActiveByUnit(unitId));
     }
 
     @Override
-    public Iterable<ServisDto> getAllActive() {
-        return null;
+    public List<ServisDto> getAllActive() {
+        return servisMapper.toServisDtos(servisRepository.findAllActive());
     }
 }
