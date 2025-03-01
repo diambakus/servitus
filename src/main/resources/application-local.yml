@@ -47,6 +47,7 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
 springdoc:
   swagger-ui:
     path: swagger-ui.html
