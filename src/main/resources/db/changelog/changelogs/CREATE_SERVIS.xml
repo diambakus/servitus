@@ -5,8 +5,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <!-- Create the units table -->
     <changeSet id="1" author="adruida">
+        <createSequence sequenceName="servis_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <!-- Create the units table -->
+    <changeSet id="2" author="adruida">
         <createTable tableName="servis">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
@@ -21,10 +25,11 @@
             <column name="change_date" type="DATE"/>
             <column name="active" type="BOOLEAN"/>
         </createTable>
-    </changeSet>
-
-    <changeSet id="2" author="adruida">
-        <createSequence sequenceName="servis_seq" startValue="1" incrementBy="1"/>
+        <addDefaultValue
+                tableName="servis"
+                columnName="id"
+                defaultValueComputed="NEXT VALUE FOR org_seq"
+                columnDataType="BIGINT"/>
     </changeSet>
 
 </databaseChangeLog>
