@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @EqualsAndHashCode(exclude = {"attributes", "servisSet"})
+@ToString
 @Entity
 @Table(name = "units")
 public class Unit implements Serializable {

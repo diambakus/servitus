@@ -32,4 +32,17 @@
                 columnDataType="BIGINT"/>
     </changeSet>
 
+    <changeSet id="3" author="adruida">
+        <createTable tableName="requisites">
+            <column name="servis_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_requisites_servis" references="servis(id)"/>
+            </column>
+            <column name="position" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/>
+        </createTable>
+        <addPrimaryKey tableName="requisites" columnNames="servis_id, position" />
+    </changeSet>
+
 </databaseChangeLog>

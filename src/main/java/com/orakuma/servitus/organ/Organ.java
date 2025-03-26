@@ -5,12 +5,14 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "organs")
 public class Organ implements Serializable {
@@ -47,7 +49,7 @@ public class Organ implements Serializable {
     }
 
     public Map<String, String> getAttributes() {
-        return this.attributes;
+        return Collections.unmodifiableMap(this.attributes);
     }
 
     public void setAttributes(Map<String, String> attributes) {

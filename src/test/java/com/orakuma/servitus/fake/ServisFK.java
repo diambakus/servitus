@@ -30,7 +30,8 @@ public class ServisFK {
                 "Service1",
                 100.0, ServisType.SERVICE,
                 "Additional details",
-                Collections.emptySet()
+                Collections.emptySet(),
+                Collections.emptyMap()
         );
     }
 }

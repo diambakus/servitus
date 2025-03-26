@@ -78,10 +78,15 @@ public class OrganServiceImpl implements OrganService {
     @Override
     public Optional<OrganDto> saveAttributes(Long id, Map<String, String> attributes) {
         Organ organ = repositoriesHandler.getOrganById(id);
-        attributes.forEach((key, value) -> {
-            organ.getAttributes().put(key, value);
-        });
-        return Optional.empty();
+
+        LinkedHashMap<String, String> updatedAttributes = Stream
+                .concat(attributes.entrySet().stream(), organ.getAttributes().entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, LinkedHashMap::new));
+
+        organ.setAttributes(updatedAttributes);
+        organ.setModified(LocalDate.now());
+        Organ persisted = organRepository.save(organ);
+        return Optional.ofNullable(organMapper.toOrganDto(persisted));
     }
 
     private Organ makeInactive(Long organId) {
