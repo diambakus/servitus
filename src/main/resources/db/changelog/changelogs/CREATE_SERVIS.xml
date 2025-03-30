@@ -18,11 +18,14 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints unique="true" nullable="false"/>
             </column>
+            <column name="requester" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="price" type="DECIMAL(10,2)"/>
             <column name="servis_type" type="VARCHAR(50)"/>
             <column name="additional_details" type="TEXT"/>
             <column name="created" type="DATE"/>
-            <column name="change_date" type="DATE"/>
+            <column name="modified" type="DATE"/>
             <column name="active" type="BOOLEAN"/>
         </createTable>
         <addDefaultValue

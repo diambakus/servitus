@@ -5,11 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Service
 @Transactional
@@ -76,14 +74,15 @@ public class OrganServiceImpl implements OrganService {
     }
 
     @Override
-    public Optional<OrganDto> saveAttributes(Long id, Map<String, String> attributes) {
+    public Optional<OrganDto> saveAttributes(Long id, Map<String, String> newAttributes) {
         Organ organ = repositoriesHandler.getOrganById(id);
 
-        LinkedHashMap<String, String> updatedAttributes = Stream
-                .concat(attributes.entrySet().stream(), organ.getAttributes().entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, LinkedHashMap::new));
+        newAttributes.forEach((key, value) -> {
+            if (!value.equals(organ.getAttributes().get(key))) {
+                organ.getAttributes().put(key, value);
+            }
+        });
 
-        organ.setAttributes(updatedAttributes);
         organ.setModified(LocalDate.now());
         Organ persisted = organRepository.save(organ);
         return Optional.ofNullable(organMapper.toOrganDto(persisted));
@@ -98,16 +97,17 @@ public class OrganServiceImpl implements OrganService {
     }
 
     @Override
-    public OrganDto updateOrganWithProperties(Long id, Map<String, String> fieldsContentMap) {
+    public OrganDto updateOrganWithProperties(Long id, Map<String, String> newAttributes) {
         Organ organ = repositoriesHandler.getOrganById(id);
 
-        LinkedHashMap<String, String> attributesAndValues = Stream
-                .concat(fieldsContentMap.entrySet().stream(), organ.getAttributes().entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, LinkedHashMap::new));
+        newAttributes.forEach((key, value) -> {
+            if (!value.equals(organ.getAttributes().get(key))) {
+                organ.getAttributes().put(key, value);
+            }
+        });
 
-        organ.setAttributes(attributesAndValues);
+        organ.setModified(LocalDate.now());
         Organ updatedOrgan = organRepository.save(organ);
-        OrganDto updatedOrganDto = organMapper.toOrganDto(updatedOrgan);
-        return updatedOrganDto;
+        return organMapper.toOrganDto(updatedOrgan);
     }
 }

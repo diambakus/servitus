@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ public class Organ implements Serializable {
     private String    note;
     @EqualsAndHashCode.Exclude
     @ElementCollection
-    @CollectionTable(name = "organization_attributes", joinColumns = @JoinColumn(name = "organ_id"))
+    @CollectionTable(name = "organ_attributes", joinColumns = @JoinColumn(name = "organ_id"))
     @MapKeyColumn(name = "property")
     @Column(name = "property_value")
     private Map<String, String> attributes = new LinkedHashMap<>();
@@ -49,7 +48,7 @@ public class Organ implements Serializable {
     }
 
     public Map<String, String> getAttributes() {
-        return Collections.unmodifiableMap(this.attributes);
+        return new LinkedHashMap<>(attributes);
     }
 
     public void setAttributes(Map<String, String> attributes) {

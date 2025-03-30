@@ -21,6 +21,7 @@ public class ServisFK {
         servis.setAdditionalDetails("Additional details");
         servis.setCreated(LocalDate.now());
         servis.setActive(true);
+        servis.setRequester("Requester A");
         return servis;
     }
 
@@ -28,10 +29,11 @@ public class ServisFK {
         return new ServisDto(
                 1L,
                 "Service1",
-                100.0, ServisType.SERVICE,
+                100.0, ServisType.SERVICE.name(),
                 "Additional details",
                 Collections.emptySet(),
-                Collections.emptyMap()
+                Collections.emptyMap(),
+                "Requester A"
         );
     }
 }

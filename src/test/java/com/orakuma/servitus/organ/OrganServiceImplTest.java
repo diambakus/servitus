@@ -166,6 +166,7 @@ public class OrganServiceImplTest {
     void testUpdateOrganWithProperties() {
         Map<String, String> fieldsContentMap = new HashMap<>();
         fieldsContentMap.put("size", "large");
+        fieldsContentMap.put("color", "green");
         when(repositoriesHandler.getOrganById(1L)).thenReturn(organ);
         when(organRepository.save(organ)).thenReturn(organ);
         when(organMapper.toOrganDto(organ)).thenReturn(organDto);

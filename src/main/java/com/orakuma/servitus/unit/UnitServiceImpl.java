@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Service
@@ -97,17 +95,13 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public UnitDto updateUnitWithProperties(Long id, Map<String, String> fieldsContentMap) {
+    public UnitDto updateUnitWithProperties(Long id, Map<String, String> attributesMap) {
         Unit unit = repositoriesHandler.getUnitById(id);
 
-        LinkedHashMap<String, String> attributesAndValues = Stream
-                .concat(fieldsContentMap.entrySet().stream(), unit.getAttributes().entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, LinkedHashMap::new));
-
-        unit.setAttributes(attributesAndValues);
+        unit.setAttributes(attributesMap);
+        unit.setModified(LocalDate.now());
         Unit updatedUnit = unitRepository.save(unit);
-        UnitDto updatedUnitDto = mapper.toUnitDto(updatedUnit);
-        return updatedUnitDto;
+        return mapper.toUnitDto(updatedUnit);
     }
 
     private Unit makeInactive(Long unitId) {

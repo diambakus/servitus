@@ -31,7 +31,7 @@
                 columnDataType="BIGINT"/>
 
         <!-- Create the organization_attributes table -->
-        <createTable tableName="organization_attributes">
+        <createTable tableName="organ_attributes">
             <column name="organ_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
@@ -42,7 +42,7 @@
         </createTable>
 
         <!-- Add foreign key constraint to organization_attributes table -->
-        <addForeignKeyConstraint baseTableName="organization_attributes"
+        <addForeignKeyConstraint baseTableName="organ_attributes"
                                  baseColumnNames="organ_id"
                                  constraintName="fk_organ_attributes"
                                  referencedTableName="organs"

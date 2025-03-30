@@ -32,8 +32,18 @@ public class ServisServiceImpl implements ServisService {
     }
 
     @Override
-    public Iterable<ServisDto> getAll() {
+    public List<ServisDto> getAll() {
         return null;
+    }
+
+    @Override
+    public List<ServisDto> getAllOpen() {
+        return List.of();
+    }
+
+    @Override
+    public List<ServisDto> getAllOpenByRequestor() {
+        return List.of();
     }
 
     @Override
@@ -55,8 +65,22 @@ public class ServisServiceImpl implements ServisService {
     }
 
     @Override
-    public ServisDto update(ServisDto servisDto) {
-        return null;
+    public ServisDto update(Long servisId, Map<String, Object> fields) {
+        Servis servis = repositoriesHandler.getServisById(servisId);
+        fields.forEach((key, value) -> {
+            if (key.compareToIgnoreCase("active") == 0) {
+                servis.setActive((Boolean) value);
+            } else if (key.compareToIgnoreCase("price") == 0) {
+                servis.setPrice((Double) value);
+            } else if (key.compareToIgnoreCase("name") == 0) {
+                servis.setName((String) value);
+            } else if (key.compareToIgnoreCase("additionalDetails") == 0) {
+                servis.setAdditionalDetails((String) value);
+            }
+        });
+
+        Servis persistedServis = servisRepository.save(servis);
+        return servisMapper.toServisDto(persistedServis);
     }
 
     @Override
@@ -71,5 +95,29 @@ public class ServisServiceImpl implements ServisService {
     @Override
     public List<ServisDto> getAllActive() {
         return servisMapper.toServisDtos(servisRepository.findAllActive());
+    }
+
+    @Override
+    public ServisDto addRequisites(Long servisId, Map<Integer, String> newRequisites) {
+        Servis servis = repositoriesHandler.getServisById(servisId);
+
+        newRequisites.forEach((key, value) -> {
+            if (!value.equals(servis.getRequisites().get(key))) {
+                servis.getRequisites().put(key, value);
+            }
+        });
+        servis.setModified(LocalDate.now());
+        Servis persistedServis = servisRepository.save(servis);
+        return servisMapper.toServisDto(persistedServis);
+    }
+
+    @Override
+    public ServisDto removeRequisites(Long servisId, Map<Integer, String> newRequisites) {
+        return null;
+    }
+
+    @Override
+    public ServisDto removeUnits(Long servisId, List<Long> unitId) {
+        return null;
     }
 }

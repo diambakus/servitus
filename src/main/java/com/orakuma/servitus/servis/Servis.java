@@ -13,6 +13,8 @@ import java.util.*;
 @Table(name ="servis")
 @EqualsAndHashCode(exclude = {"units", "requisites"})
 @ToString
+@Getter
+@Setter
 public class Servis implements Serializable {
     private static final long serialVersionUID = 946132719596728289L;
     @Id
@@ -27,8 +29,9 @@ public class Servis implements Serializable {
     private ServisType servisType;
     private String additionalDetails;
     private LocalDate created;
-    private LocalDate changeDate;
+    private LocalDate modified;
     private Boolean active;
+    private String requester;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "servis_unit",
@@ -55,72 +58,8 @@ public class Servis implements Serializable {
         unit.getServisSet().remove(this);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public ServisType getServisType() {
-        return servisType;
-    }
-
-    public String getAdditionalDetails() {
-        return additionalDetails;
-    }
-
-    public LocalDate getCreated() {
-        return created;
-    }
-
-    public LocalDate getChangeDate() {
-        return changeDate;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
     public Map<Integer, String> getRequisites() {
-        return Collections.unmodifiableMap(this.requisites);
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public void setServisType(ServisType servisType) {
-        this.servisType = servisType;
-    }
-
-    public void setAdditionalDetails(String additionalDetails) {
-        this.additionalDetails = additionalDetails;
-    }
-
-    public void setCreated(LocalDate created) {
-        this.created = created;
-    }
-
-    public void setChangeDate(LocalDate changeDate) {
-        this.changeDate = changeDate;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
+        return new LinkedHashMap<>(this.requisites);
     }
 
     public void setUnits(Set<Unit> units) {
