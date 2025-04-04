@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(value = "servis/")
 public class ServisController {
@@ -31,4 +33,17 @@ public class ServisController {
     public ResponseEntity<?> getServisById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(servisService.get(id), HttpStatus.OK);
     }
+
+    @PatchMapping(value = "{id}/add-requisites")
+    public ResponseEntity<?> addToUnits(@PathVariable("id") Long id, @RequestBody Map<Integer, String> requisites) {
+        return new ResponseEntity<>(servisService.addRequisites(id, requisites), HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "{id}/remove-requisites")
+    public ResponseEntity<?> removeFromUnits(@PathVariable("id") Long id, @RequestBody Map<Integer, String> requisites) {
+        servisService.removeRequisites(id, requisites.keySet());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

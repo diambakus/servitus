@@ -101,19 +101,20 @@ public class ServisServiceImpl implements ServisService {
     public ServisDto addRequisites(Long servisId, Map<Integer, String> newRequisites) {
         Servis servis = repositoriesHandler.getServisById(servisId);
 
-        newRequisites.forEach((key, value) -> {
-            if (!value.equals(servis.getRequisites().get(key))) {
-                servis.getRequisites().put(key, value);
-            }
+        newRequisites.entrySet().forEach(entry -> {
+            servisRepository.insertRequisites(servisId, entry);
         });
+
         servis.setModified(LocalDate.now());
         Servis persistedServis = servisRepository.save(servis);
         return servisMapper.toServisDto(persistedServis);
     }
 
     @Override
-    public ServisDto removeRequisites(Long servisId, Map<Integer, String> newRequisites) {
-        return null;
+    public void removeRequisites(Long servisId, Set<Integer> chosenRequisites) {
+        Servis servis = repositoriesHandler.getServisById(servisId);
+        servisRepository.deleteRequisitesBy(servisId, chosenRequisites);
+        servisRepository.save(servis);
     }
 
     @Override
