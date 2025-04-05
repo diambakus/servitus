@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "servis/")
@@ -40,10 +41,10 @@ public class ServisController {
     }
 
     @PatchMapping(value = "{id}/remove-requisites")
-    public ResponseEntity<?> removeFromUnits(@PathVariable("id") Long id, @RequestBody Map<Integer, String> requisites) {
-        servisService.removeRequisites(id, requisites.keySet());
+    public ResponseEntity<?> removeFromUnits(@PathVariable("id") Long id, @RequestBody Set<Integer> requisitesPositions) {
+        LOG.info("Removing requisites (with listed positions) from the servis: {}", requisitesPositions.toString());
+        servisService.removeRequisites(id, requisitesPositions);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 }

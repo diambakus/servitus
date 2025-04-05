@@ -6,7 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public interface ServisRepository extends CrudRepository<Servis, Long> {
@@ -24,6 +23,7 @@ public interface ServisRepository extends CrudRepository<Servis, Long> {
     @Modifying
     @Query(value = "delete from requisites where servis_id = :servisId and position in :requisitePositions", nativeQuery = true)
     void deleteRequisitesBy(@Param("servisId") Long servisId, @Param("requisitePositions") Set<Integer> requisitePositions);
-    @Query(value = "insert into requisites values (:servisId, :entry.getKey(), :entry.getValue())", nativeQuery = true)
-    void insertRequisites(@Param("servisId") Long servisId, @Param("entry") Map.Entry<Integer, String> entry);
+    @Modifying
+    @Query(value = "insert into requisites values (:servisId, :key, :value)", nativeQuery = true)
+    void insertRequisites(@Param("servisId") Long servisId, @Param("key") Integer key, @Param("value") String value);
 }

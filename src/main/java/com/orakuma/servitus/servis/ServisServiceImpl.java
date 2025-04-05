@@ -101,8 +101,8 @@ public class ServisServiceImpl implements ServisService {
     public ServisDto addRequisites(Long servisId, Map<Integer, String> newRequisites) {
         Servis servis = repositoriesHandler.getServisById(servisId);
 
-        newRequisites.entrySet().forEach(entry -> {
-            servisRepository.insertRequisites(servisId, entry);
+        newRequisites.forEach((key, value) -> {
+            servisRepository.insertRequisites(servisId, key, value);
         });
 
         servis.setModified(LocalDate.now());
