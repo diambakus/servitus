@@ -1,3 +1,4 @@
+
 server:
   port: 8088
 
@@ -14,3 +15,5 @@ management:
     web:
       exposure:
         include: health, info
+      base-path: /servitus
+
