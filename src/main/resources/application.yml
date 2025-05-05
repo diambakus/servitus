@@ -8,6 +8,11 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.xml
   application:
     name: servitus
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/realms/kumpo/protocol/openid-connect/certs
 
 management:
   endpoints:
