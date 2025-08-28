@@ -13,10 +13,10 @@ public class OrganFK {
     }
 
     public static Organ getEntity() {
-        Organ organ = new Organ();
+
         Map<String, String> attributes = new LinkedHashMap<>();
         attributes.put("color", "red");
-        organ = new Organ();
+        Organ organ = new Organ();
         organ.setId(1L);
         organ.setName("Heart");
         organ.setNote("A vital organ");

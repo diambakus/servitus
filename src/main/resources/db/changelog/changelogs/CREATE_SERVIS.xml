@@ -11,7 +11,7 @@
 
     <!-- Create the units table -->
     <changeSet id="2" author="adruida">
-        <createTable tableName="servis">
+        <createTable tableName="servis" schemaName="${kumpoSchemaName}">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -31,12 +31,12 @@
         <addDefaultValue
                 tableName="servis"
                 columnName="id"
-                defaultValueComputed="NEXT VALUE FOR org_seq"
+                defaultValueComputed="nextval('org_seq')"
                 columnDataType="BIGINT"/>
     </changeSet>
 
     <changeSet id="3" author="adruida">
-        <createTable tableName="requisites">
+        <createTable tableName="requisites" schemaName="${kumpoSchemaName}">
             <column name="servis_id" type="BIGINT">
                 <constraints nullable="false" foreignKeyName="fk_requisites_servis" references="servis(id)"/>
             </column>

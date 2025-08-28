@@ -10,14 +10,14 @@
         <createSequence sequenceName="org_seq" startValue="1" incrementBy="1"/>
 
         <!-- Create the organs table -->
-        <createTable tableName="organs">
+        <createTable tableName="organs" schemaName="${kumpoSchemaName}">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="note" type="CLOB"/>
+            <column name="note" type="text"/>
             <column name="created" type="DATE"/>
             <column name="modified" type="DATE"/>
             <column name="active" type="BOOLEAN"/>
@@ -27,11 +27,11 @@
         <addDefaultValue
                 tableName="organs"
                 columnName="id"
-                defaultValueComputed="NEXT VALUE FOR org_seq"
+                defaultValueComputed="nextval('org_seq')"
                 columnDataType="BIGINT"/>
 
         <!-- Create the organization_attributes table -->
-        <createTable tableName="organ_attributes">
+        <createTable tableName="organ_attributes" schemaName="${kumpoSchemaName}">
             <column name="organ_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>

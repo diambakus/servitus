@@ -11,14 +11,14 @@
         <!-- Create the sequence for the unit table -->
         <createSequence sequenceName="unit_seq" startValue="1" incrementBy="1"/>
 
-        <createTable tableName="units">
+        <createTable tableName="units" schemaName="${kumpoSchemaName}">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="note" type="CLOB"/>
+            <column name="note" type="text"/>
             <column name="fk_organ" type="BIGINT">
                 <constraints nullable="true"/>
             </column>
@@ -29,7 +29,7 @@
         <addDefaultValue
                 tableName="units"
                 columnName="id"
-                defaultValueComputed="NEXT VALUE FOR unit_seq"
+                defaultValueComputed="nextval('unit_seq')"
                 columnDataType="BIGINT"/>
 
         <!-- Add foreign key constraint for fk_organ -->
@@ -43,7 +43,7 @@
         onUpdate="CASCADE"/>
 
         <!-- Create the unit_attributes table -->
-        <createTable tableName="unit_attributes">
+        <createTable tableName="unit_attributes" schemaName="${kumpoSchemaName}">
             <column name="unit_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>

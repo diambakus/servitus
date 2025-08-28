@@ -18,9 +18,7 @@ public interface ServisMapper {
             case "FINE" -> ServisType.FINE;
             case "GOODS" -> ServisType.GOODS;
             case "SERVICE" -> ServisType.SERVICE;
-            default -> {
-                yield ServisType.INVALID;
-            }
+            default -> ServisType.INVALID;
         };
     }
 }

@@ -1,12 +1,12 @@
 package com.orakuma.servitus.organ;
 
+import com.orakuma.servitus.address.AddressService;
 import com.orakuma.servitus.utils.RepositoriesHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -16,15 +16,18 @@ public class OrganServiceImpl implements OrganService {
     private final OrganRepository     organRepository;
     private final OrganMapper         organMapper;
     private final RepositoriesHandler repositoriesHandler;
+    private final AddressService      addressService;
 
     public OrganServiceImpl(
                             final OrganRepository organRepository,
                             final OrganMapper organMapper,
-                            final RepositoriesHandler repositoriesHandler
+                            final RepositoriesHandler repositoriesHandler,
+                            final AddressService addressService
     ) {
         this.organRepository = organRepository;
         this.organMapper = organMapper;
         this.repositoriesHandler = repositoriesHandler;
+        this.addressService = addressService;
     }
 
     @Override

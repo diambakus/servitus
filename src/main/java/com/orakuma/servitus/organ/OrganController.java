@@ -11,7 +11,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "organ")
 public class OrganController {
-    private OrganService organService;
+    private final OrganService organService;
 
     public OrganController(OrganService organService) {
         this.organService = organService;

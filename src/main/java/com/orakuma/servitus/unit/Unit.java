@@ -21,7 +21,7 @@ public class Unit implements Serializable {
     private Long      id;
     @Column(unique = true, nullable = false)
     private String    name;
-    @Lob
+    @Column(columnDefinition = "text")
     private String    note;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_organ")

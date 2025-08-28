@@ -22,7 +22,7 @@ public class Organ implements Serializable {
     private Long      id;
     @Column(unique = true, nullable = false)
     private String    name;
-    @Lob
+    @Column(columnDefinition = "text")
     private String    note;
     @EqualsAndHashCode.Exclude
     @ElementCollection

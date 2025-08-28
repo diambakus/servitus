@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("unit")
 public class UnitController {
-    private UnitService unitService;
+    private final UnitService unitService;
 
     public UnitController(UnitService unitService) {
         this.unitService = unitService;
