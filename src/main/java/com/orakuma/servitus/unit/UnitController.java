@@ -1,9 +1,14 @@
 package com.orakuma.servitus.unit;
 
+import com.orakuma.servitus.organ.OrganDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -17,31 +22,40 @@ public class UnitController {
 
     @GetMapping
     @ApiResponse(responseCode = "200", description = "List all units or by organisation")
-    public ResponseEntity<?> getUnitsByOrganisation(@RequestParam(value = "organId", required = false) Long organId) {
-        return ResponseEntity.ok(organId == null ? unitService.gets(): unitService.getByOrgan(organId));
+    public ResponseEntity<List<UnitDto>> getUnitsByOrganisation(@RequestParam(value = "organId", required = false) Long organId) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(organId == null ? unitService.gets(): unitService.getByOrgan(organId));
     }
 
     @PostMapping
     @ApiResponse(responseCode = "201", description = "Registers new Unit")
-    public ResponseEntity<?> post(@RequestBody UnitDto unitDto) {
-        return new ResponseEntity(unitService.create(unitDto), HttpStatus.CREATED);
+    public ResponseEntity<Optional<UnitDto>> post(@RequestBody UnitDto unitDto) {
+        return new ResponseEntity<>(unitService.create(unitDto), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
     @ApiResponse(responseCode = "200", description = "Get unit by identity")
-    public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        return new ResponseEntity(unitService.getBy(id), HttpStatus.OK);
+    public ResponseEntity<Optional<UnitDto>> get(@PathVariable("id") Long id) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(unitService.getBy(id));
     }
 
     @GetMapping(value = "/{unitId}/organ")
     @ApiResponse(responseCode = "200", description = "Given unit Id, get the corresponding organ")
-    public ResponseEntity<?> getOrgan(@PathVariable("unitId") Long unitId) {
-        return new ResponseEntity(unitService.getOrgan(unitId), HttpStatus.OK);
+    public ResponseEntity<Optional<OrganDto>> getOrgan(@PathVariable("unitId") Long unitId) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Optional.of(unitService.getOrgan(unitId)));
     }
 
     @PatchMapping(value = "/{unitId}")
     @ApiResponse(responseCode = "200", description = "Given unit Id, inactivate the unit")
-    public ResponseEntity<?> inactive(@PathVariable("unitId") Long unitId) {
+    public ResponseEntity<Integer> inactive(@PathVariable("unitId") Long unitId) {
         int inactivatedUnit = unitService.inactivate(unitId);
         HttpStatus responseStatus = HttpStatus.OK;
         if (inactivatedUnit == -1) {

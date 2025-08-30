@@ -6,6 +6,7 @@ import com.orakuma.servitus.contact.ContactDto;
 import com.orakuma.servitus.contact.ContactService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,31 +30,43 @@ public class OrganDetailsController {
 
 
     @PostMapping("/address/{organId}")
-    @ApiResponse(responseCode = "203", description = "Enhance addresses to the organisation")
-    public ResponseEntity<?> addAddress(@PathVariable("organId") Long organId, @RequestBody Iterable<AddressDto> addressDtos) {
+    @ApiResponse(responseCode = "201", description = "Enhance addresses to the organisation")
+    public ResponseEntity<Iterable<AddressDto>> addAddress(
+            @PathVariable("organId") Long organId,
+            @RequestBody Iterable<AddressDto> addressDtos) {
         Iterable<AddressDto> savedAddresses = addAddresses(organId, addressDtos);
         return new ResponseEntity<>(savedAddresses, HttpStatus.CREATED);
     }
 
     @PatchMapping("/address/{id}")
     @ApiResponse(responseCode = "200", description = "Update an address information")
-    public ResponseEntity<?> updateAddress(@PathVariable("id") Long id, @RequestBody Map<String, Object> fieldsValues) {
+    public ResponseEntity<Optional<AddressDto>> updateAddress(
+            @PathVariable("id") Long id,
+            @RequestBody Map<String, Object> fieldsValues) {
         Optional<AddressDto> updatedAddress = addressService.update(id, fieldsValues);
-        return new ResponseEntity<>(updatedAddress, HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(updatedAddress);
     }
 
     @PostMapping("/contact/{organId}")
-    @ApiResponse(responseCode = "203", description = "Enhance contacts to the organisation")
-    public ResponseEntity<?> addContact(@PathVariable("organId") Long organId, @RequestBody Iterable<ContactDto> contacts) {
+    @ApiResponse(responseCode = "201", description = "Enhance contacts to the organisation")
+    public ResponseEntity<Iterable<ContactDto>> addContact(
+            @PathVariable("organId") Long organId,
+            @RequestBody Iterable<ContactDto> contacts) {
         Iterable<ContactDto> addedContacts = addContacts(organId, contacts);
         return new ResponseEntity<>(addedContacts, HttpStatus.CREATED);
     }
 
     @PatchMapping("/contact/{id}")
     @ApiResponse(responseCode = "200", description = "Update a contact information")
-    public ResponseEntity<?> updateContact(@PathVariable("id") Long id, @RequestBody Map<String, Object> fieldsValues) {
+    public ResponseEntity<Optional<ContactDto>> updateContact(@PathVariable("id") Long id, @RequestBody Map<String, Object> fieldsValues) {
         Optional<ContactDto> updatedContact = contactService.update(id, fieldsValues);
-        return new ResponseEntity<>(updatedContact, HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(updatedContact);
     }
 
     private Iterable<AddressDto> addAddresses(Long organId, Iterable<AddressDto> addressesDto) {
