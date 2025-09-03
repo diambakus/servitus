@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.orakuma.servitus.utils.EntityTypeConverter.ORGAN_ENTITY_TYPE;
+
 @RestController
 @RequestMapping(value = "organ")
 public class OrganDetailsController {
@@ -28,6 +30,15 @@ public class OrganDetailsController {
         this.contactService = contactService;
     }
 
+    @GetMapping("/address/{organId}")
+    @ApiResponse(responseCode = "200", description = "Fetch addresses by the organisation")
+    public ResponseEntity<Iterable<AddressDto>> getAddressesByOrganId(@PathVariable("organId") Long organId) {
+        Iterable<AddressDto> addressesDto = addressService.getAddressesByEntityIdAndType(organId, ORGAN_ENTITY_TYPE);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(addressesDto);
+    }
 
     @PostMapping("/address/{organId}")
     @ApiResponse(responseCode = "201", description = "Enhance addresses to the organisation")
@@ -48,6 +59,16 @@ public class OrganDetailsController {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(updatedAddress);
+    }
+
+    @GetMapping("/contact/{organId}")
+    @ApiResponse(responseCode = "200", description = "Fetch contacts by the organisation")
+    public ResponseEntity<Iterable<ContactDto>> getContactsByOrganId(@PathVariable("organId") Long organId) {
+        Iterable<ContactDto> contactsDto = contactService.getContactsByEntityIdAndType(organId, ORGAN_ENTITY_TYPE);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(contactsDto);
     }
 
     @PostMapping("/contact/{organId}")
@@ -73,7 +94,7 @@ public class OrganDetailsController {
         List<AddressDto> resultAddressesDto = new LinkedList<>();
         Optional<AddressDto> addressDto;
         for (AddressDto addressDtoItem : addressesDto) {
-            addressDto = addressService.addAddress(organId, "ORGAN", addressDtoItem);
+            addressDto = addressService.addAddress(organId, ORGAN_ENTITY_TYPE, addressDtoItem);
             resultAddressesDto.add(addressDto.orElse(null));
         }
         return resultAddressesDto;
@@ -83,7 +104,7 @@ public class OrganDetailsController {
         List<ContactDto> resultContactsDto = new LinkedList<>();
         Optional<ContactDto> contactDto;
         for (ContactDto contactDtoItem : contacts) {
-            contactDto = contactService.addContact(organId, "ORGAN", contactDtoItem);
+            contactDto = contactService.addContact(organId, ORGAN_ENTITY_TYPE, contactDtoItem);
             resultContactsDto.add(contactDto.orElse(null));
         }
         return resultContactsDto;

@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.orakuma.servitus.utils.EntityTypeConverter.ORGAN_ENTITY_TYPE;
+import static com.orakuma.servitus.utils.EntityTypeConverter.UNIT_ENTITY_TYPE;
+
 @RestController
 @RequestMapping(value = "unit")
 public class UnitDetailsController {
@@ -28,6 +31,15 @@ public class UnitDetailsController {
         this.contactService = contactService;
     }
 
+    @GetMapping("/address/{unitId}")
+    @ApiResponse(responseCode = "200", description = "Fetch addresses by unit")
+    public ResponseEntity<Iterable<AddressDto>> getAddressesByOrganId(@PathVariable("unitId") Long unitId) {
+        Iterable<AddressDto> addressesDto = addressService.getAddressesByEntityIdAndType(unitId, UNIT_ENTITY_TYPE);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(addressesDto);
+    }
 
     @PostMapping("/address/{unitId}")
     @ApiResponse(responseCode = "201", description = "Enhance addresses to the unit")
@@ -48,6 +60,16 @@ public class UnitDetailsController {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(updatedAddress);
+    }
+
+    @GetMapping("/contact/{unitId}")
+    @ApiResponse(responseCode = "200", description = "Fetch contacts by unit")
+    public ResponseEntity<Iterable<ContactDto>> getContactsByOrganId(@PathVariable("unitId") Long unitId) {
+        Iterable<ContactDto> contactsDto = contactService.getContactsByEntityIdAndType(unitId, ORGAN_ENTITY_TYPE);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(contactsDto);
     }
 
     @PostMapping("/contact/{unitId}")
@@ -78,7 +100,7 @@ public class UnitDetailsController {
         List<AddressDto> resultAddressesDto = new LinkedList<>();
         Optional<AddressDto> addressDto;
         for (AddressDto addressDtoItem : addressesDto) {
-            addressDto = addressService.addAddress(unitId, "UNIT", addressDtoItem);
+            addressDto = addressService.addAddress(unitId, UNIT_ENTITY_TYPE, addressDtoItem);
             resultAddressesDto.add(addressDto.orElse(null));
         }
         return resultAddressesDto;
@@ -88,7 +110,7 @@ public class UnitDetailsController {
         List<ContactDto> resultContactsDto = new LinkedList<>();
         Optional<ContactDto> contactDto;
         for (ContactDto contactDtoItem : contacts) {
-            contactDto = contactService.addContact(unitId, "UNIT", contactDtoItem);
+            contactDto = contactService.addContact(unitId, UNIT_ENTITY_TYPE, contactDtoItem);
             resultContactsDto.add(contactDto.orElse(null));
         }
         return resultContactsDto;

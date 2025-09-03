@@ -27,6 +27,9 @@ public class Address {
     private String state;
     private String country;
     private String postalCode;
+    private String addressNumber;
+    private Double latitude;
+    private Double longitude;
     @Enumerated(EnumType.STRING)
     private AddressType addressType;
     private LocalDateTime created;

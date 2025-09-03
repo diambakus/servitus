@@ -7,5 +7,8 @@ public record AddressDto(
         String        state,
         String        country,
         String        postalCode,
+        String        addressNumber,
+        Double        latitude,
+        Double        longitude,
         String        addressType
 ) { }

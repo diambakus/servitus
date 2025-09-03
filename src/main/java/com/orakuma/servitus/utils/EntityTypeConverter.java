@@ -5,6 +5,8 @@ import com.orakuma.servitus.contact.ContactType;
 
 public final class EntityTypeConverter {
     private EntityTypeConverter(){}
+    public static final String ORGAN_ENTITY_TYPE = "ORGAN";
+    public static final String UNIT_ENTITY_TYPE = "UNIT";
 
     public static ContactType toContactType(String contactType) {
         return switch (contactType) {
