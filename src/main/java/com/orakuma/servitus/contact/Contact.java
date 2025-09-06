@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode
 @ToString
-@Accessors(chain = true, fluent = true)
+@Accessors(chain = true)
 @Entity
 @Table(name = "contacts")
 public class Contact {

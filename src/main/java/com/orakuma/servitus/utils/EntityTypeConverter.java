@@ -21,4 +21,12 @@ public final class EntityTypeConverter {
             default -> AddressType.INVALID;
         };
     }
+
+    public static String toContactTypeView(ContactType contactType) {
+        return contactType.name();
+    }
+
+    public static String toAddressTypeView(AddressType addressType) {
+        return addressType.name();
+    }
 }

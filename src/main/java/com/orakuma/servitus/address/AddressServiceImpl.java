@@ -40,7 +40,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Optional<AddressDto> addAddress(Long entityId, String entityType, AddressDto addressDto) {
-        Address address = addressMapper.toAddress(addressDto).created(LocalDateTime.now());
+        Address address = addressMapper.toAddress(addressDto).setCreated(LocalDateTime.now());
         address = addressRepository.save(address);
         EntityAddress entityAddress = new EntityAddress()
                 .entityType(entityType)
@@ -55,17 +55,17 @@ public class AddressServiceImpl implements AddressService {
         Address address = repositoriesHandler.getAddressById(addressId);
         updatingFieldsValue.forEach((key, value) -> {
            if (key.equalsIgnoreCase("street")) {
-               address.street(value.toString());
+               address.setStreet(value.toString());
            } else if (key.equalsIgnoreCase("city")) {
-               address.city(value.toString());
+               address.setCity(value.toString());
            } else if (key.equalsIgnoreCase("state")) {
-               address.state(value.toString());
+               address.setState(value.toString());
            } else if (key.equalsIgnoreCase("country")) {
-               address.country(value.toString());
+               address.setCountry(value.toString());
            } else if (key.equalsIgnoreCase("postalCode")) {
-               address.postalCode(value.toString());
+               address.setPostalCode(value.toString());
            } else if (key.equalsIgnoreCase("addressType")) {
-               address.addressType(EntityTypeConverter.toAddressType(value.toString()));
+               address.setAddressType(EntityTypeConverter.toAddressType(value.toString()));
            } else {
                throw new IllegalArgumentException("Unknown property: " + key);
            }

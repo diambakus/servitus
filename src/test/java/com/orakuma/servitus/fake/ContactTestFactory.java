@@ -9,22 +9,22 @@ public class ContactTestFactory {
 
     public static Contact createFakeContact() {
         return new Contact()
-                .id(1L)
-                .name("John Doe")
-                .phone("+1-555-1234")
-                .email("john.doe@example.com")
-                .contactType(ContactType.MAIN)
-                .created(LocalDateTime.now());
+                .setId(1L)
+                .setName("John Doe")
+                .setPhone("+1-555-1234")
+                .setEmail("john.doe@example.com")
+                .setContactType(ContactType.MAIN)
+                .setCreated(LocalDateTime.now());
     }
 
     public static Contact createFakeContact(Long id, String name, String phone, String email, ContactType type) {
         return new Contact()
-                .id(id)
-                .name(name)
-                .phone(phone)
-                .email(email)
-                .contactType(type)
-                .created(LocalDateTime.now());
+                .setId(id)
+                .setName(name)
+                .setPhone(phone)
+                .setEmail(email)
+                .setContactType(type)
+                .setCreated(LocalDateTime.now());
     }
 }
 

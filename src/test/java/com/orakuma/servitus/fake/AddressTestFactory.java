@@ -9,26 +9,26 @@ public class AddressTestFactory {
 
     public static Address createFakeAddress() {
         return new Address()
-                .id(1L)
-                .street("123 Main Street")
-                .city("Springfield")
-                .state("IL")
-                .country("USA")
-                .postalCode("62704")
-                .addressType(AddressType.MAIN)
-                .created(LocalDateTime.now());
+                .setId(1L)
+                .setStreet("123 Main Street")
+                .setCity("Springfield")
+                .setState("IL")
+                .setCountry("USA")
+                .setPostalCode("62704")
+                .setAddressType(AddressType.MAIN)
+                .setCreated(LocalDateTime.now());
     }
 
     public static Address createFakeAddress(Long id, String street, String city, String state,
                                             String country, String postalCode, AddressType type) {
         return new Address()
-                .id(id)
-                .street(street)
-                .city(city)
-                .state(state)
-                .country(country)
-                .postalCode(postalCode)
-                .addressType(type)
-                .created(LocalDateTime.now());
+                .setId(id)
+                .setStreet(street)
+                .setCity(city)
+                .setState(state)
+                .setCountry(country)
+                .setPostalCode(postalCode)
+                .setAddressType(type)
+                .setCreated(LocalDateTime.now());
     }
 }

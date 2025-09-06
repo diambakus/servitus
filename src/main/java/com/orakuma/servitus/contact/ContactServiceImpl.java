@@ -45,7 +45,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Optional<ContactDto> addContact(Long entityId, String entityType, ContactDto contactDto) {
-        Contact contact = contactMapper.toEntity(contactDto).created(LocalDateTime.now());
+        Contact contact = contactMapper.toEntity(contactDto).setCreated(LocalDateTime.now());
         contact = contactRepository.save(contact);
         EntityContact entityContact = new EntityContact()
                 .entityType(entityType)
@@ -60,13 +60,13 @@ public class ContactServiceImpl implements ContactService {
         Contact contact = repositoriesHandler.getContactById(contactId);
         updatingPropertiesMap.forEach((key, value) -> {
            if (key.equalsIgnoreCase("name")) {
-               contact.name((String) value);
+               contact.setName((String) value);
            } else if (key.equalsIgnoreCase("phone")) {
-               contact.phone((String) value);
+               contact.setPhone((String) value);
            } else if (key.equalsIgnoreCase("email")) {
-               contact.email((String) value);
+               contact.setEmail((String) value);
            } else if (key.equalsIgnoreCase("contactType")) {
-               contact.contactType(EntityTypeConverter.toContactType((String) value));
+               contact.setContactType(EntityTypeConverter.toContactType((String) value));
            } else {
                throw new IllegalArgumentException("Unknown property: " + key);
            }
