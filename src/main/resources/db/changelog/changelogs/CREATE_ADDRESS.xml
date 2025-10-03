@@ -5,6 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
+    <changeSet id="create-schema" author="adruida">
+        <sql>CREATE SCHEMA IF NOT EXISTS "SCHEMAKUMPO";</sql>
+    </changeSet>
     <changeSet id="create_address" author="adruida">
         <createSequence sequenceName="address_seq" startValue="1" incrementBy="1"/>
 

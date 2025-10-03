@@ -4,7 +4,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-
+    <changeSet id="create-schema" author="adruida">
+        <sql>CREATE SCHEMA IF NOT EXISTS "SCHEMAKUMPO";</sql>
+    </changeSet>
     <changeSet id="1" author="adruida">
         <createSequence sequenceName="contact_seq" startValue="1" incrementBy="1"/>
 
