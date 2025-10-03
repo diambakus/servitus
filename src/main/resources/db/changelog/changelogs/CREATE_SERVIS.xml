@@ -48,4 +48,11 @@
         <addPrimaryKey tableName="requisites" columnNames="servis_id, position" />
     </changeSet>
 
+    <changeSet id="4" author="adruida">
+        <renameColumn tableName="servis" oldColumnName="additional_details" newColumnName="description" columnDataType="text"/>
+    </changeSet>
+    <changeSet id="5-delete-column-requester" author="adruida">
+        <dropColumn tableName="servis" columnName="requester" />
+    </changeSet>
+
 </databaseChangeLog>

@@ -19,7 +19,7 @@ public class OrganFK {
         Organ organ = new Organ();
         organ.setId(1L);
         organ.setName("Heart");
-        organ.setNote("A vital organ");
+        organ.setDescription("A vital organ");
         organ.setActive(true);
         organ.setCreated(LocalDate.now());
         organ.setModified(null);
@@ -29,6 +29,6 @@ public class OrganFK {
     }
 
     public static OrganDto getDto() {
-        return new OrganDto(1L, "Heart", "note", new HashMap<>(), "content");
+        return new OrganDto(1L, "Heart", "description", new HashMap<>(), "content");
     }
 }

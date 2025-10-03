@@ -3,6 +3,9 @@ spring:
     add-properties: false
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
+    enabled: true
+    default-schema: schemakumpo
+    liquibase-schema: schemakumpo
   application:
     name: servitus
   security:
@@ -10,6 +13,12 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: http://localhost:8080/realms/kumpo/protocol/openid-connect/certs
+  profiles:
+    active: local
+  jpa:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
 management:
   endpoints:

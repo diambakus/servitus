@@ -66,6 +66,8 @@ public class AddressServiceImpl implements AddressService {
                address.setPostalCode(value.toString());
            } else if (key.equalsIgnoreCase("addressType")) {
                address.setAddressType(EntityTypeConverter.toAddressType(value.toString()));
+           } else if (key.equalsIgnoreCase("addressNumber")) {
+               address.setAddressNumber(value.toString());
            } else {
                throw new IllegalArgumentException("Unknown property: " + key);
            }

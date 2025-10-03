@@ -18,7 +18,7 @@ public class UnitFK {
         Unit unit = new Unit();
         unit.setId(1L);
         unit.setName("Unit1");
-        unit.setNote("Sample unit");
+        unit.setDescription("Sample unit");
         unit.setActive(true);
         unit.setAttributes(attributes);
         unit.setCreated(LocalDate.now());
@@ -27,6 +27,6 @@ public class UnitFK {
     }
 
     public static UnitDto getDto() {
-        return new UnitDto(1L, "Unit1", "Sample unit", null, Map.of(), Set.of());
+        return new UnitDto(1L, "Unit1", "Sample unit", null, Map.of());
     }
 }

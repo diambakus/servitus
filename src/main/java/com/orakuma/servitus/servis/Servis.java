@@ -20,6 +20,7 @@ public class Servis implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "servis_gen")
     @SequenceGenerator(name = "servis_gen", sequenceName = "servis_seq", allocationSize = 1)
+    @ToString.Exclude
     private Long id;
     @NotNull(message = "Item name is required")
     @Basic(optional = false)
@@ -27,11 +28,11 @@ public class Servis implements Serializable {
     private Double price;
     @Enumerated(EnumType.STRING)
     private ServisType servisType;
-    private String additionalDetails;
+    private String description;
     private LocalDate created;
     private LocalDate modified;
     private Boolean active;
-    private String requester;
+    @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "servis_unit",

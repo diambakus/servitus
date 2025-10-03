@@ -14,6 +14,8 @@ RUN mvn clean package -DskipTests
 FROM openjdk:21-jdk-slim
 LABEL authors="adruida"
 
+EXPOSE 8080
+
 # Create app user
 RUN addgroup --system orakuma && adduser --system orakuma --ingroup orakuma
 USER orakuma:orakuma

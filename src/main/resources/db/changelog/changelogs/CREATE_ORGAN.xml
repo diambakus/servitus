@@ -48,4 +48,7 @@
                                  referencedTableName="organs"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="2" author="adruida">
+        <renameColumn tableName="organs" oldColumnName="note" newColumnName="description" columnDataType="text"/>
+    </changeSet>
 </databaseChangeLog>

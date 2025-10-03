@@ -54,8 +54,7 @@ public class UnitServiceImplTest {
                 "Unit1",
                 "Sample unit",
                 OrganFK.getDto(),
-                UnitFK.getEntity().getAttributes(),
-                Set.of()
+                UnitFK.getEntity().getAttributes()
         );
 
         unit = UnitFK.getEntity();
@@ -104,7 +103,7 @@ public class UnitServiceImplTest {
 
     @Test
     void testCreate_Failure_OrganIsNull() {
-        unitDto = new UnitDto(1L, "Unit1", "Sample unit", null, Map.of(), Set.of());
+        unitDto = new UnitDto(1L, "Unit1", "Sample unit", null, Map.of());
         when(mapper.toUnit(unitDto)).thenReturn(unit);
 
         Exception exception = assertThrows(NullPointerException.class, () -> unitService.create(unitDto));

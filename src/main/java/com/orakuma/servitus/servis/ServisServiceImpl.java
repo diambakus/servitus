@@ -33,7 +33,8 @@ public class ServisServiceImpl implements ServisService {
 
     @Override
     public List<ServisDto> getAll() {
-        return null;
+        Iterable<Servis> servisEntityList = servisRepository.findAll();
+        return servisMapper.toServisDtos(servisEntityList);
     }
 
     @Override
@@ -74,8 +75,8 @@ public class ServisServiceImpl implements ServisService {
                 servis.setPrice((Double) value);
             } else if (key.compareToIgnoreCase("name") == 0) {
                 servis.setName((String) value);
-            } else if (key.compareToIgnoreCase("additionalDetails") == 0) {
-                servis.setAdditionalDetails((String) value);
+            } else if (key.compareToIgnoreCase("description") == 0) {
+                servis.setDescription((String) value);
             }
         });
 
@@ -89,7 +90,8 @@ public class ServisServiceImpl implements ServisService {
 
     @Override
     public List<ServisDto> getByUnit(Long unitId) {
-        return servisMapper.toServisDtos(servisRepository.findAllActiveByUnit(unitId));
+        List<Servis> servisEntityList = servisRepository.findAllActiveByUnit(unitId);
+        return servisMapper.toServisDtos(servisEntityList);
     }
 
     @Override

@@ -18,10 +18,9 @@ public class ServisFK {
         servis.setName("Service1");
         servis.setPrice(100.0);
         servis.setServisType(ServisType.SERVICE);
-        servis.setAdditionalDetails("Additional details");
+        servis.setDescription("description details");
         servis.setCreated(LocalDate.now());
         servis.setActive(true);
-        servis.setRequester("Requester A");
         return servis;
     }
 
@@ -32,8 +31,7 @@ public class ServisFK {
                 100.0, ServisType.SERVICE.name(),
                 "Additional details",
                 Collections.emptySet(),
-                Collections.emptyMap(),
-                "Requester A"
+                Collections.emptyMap()
         );
     }
 }

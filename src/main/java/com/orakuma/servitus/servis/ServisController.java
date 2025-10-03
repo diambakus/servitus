@@ -12,17 +12,24 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value = "servis/")
+@RequestMapping("servis")
 public class ServisController {
     private final ServisService servisService;
     private static final Logger LOG = LoggerFactory.getLogger(ServisController.class);
-
 
     public ServisController(ServisService servisService) {
         this.servisService = servisService;
     }
 
-    @GetMapping("{unitId}")
+    @GetMapping
+    public ResponseEntity<List<ServisDto>> getAllServis(){
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(servisService.getAll());
+    }
+
+    @GetMapping("/unit/{unitId}")
     public ResponseEntity<List<ServisDto>> getAllServisByUnitId(@PathVariable("unitId") Long unitId) {
         return ResponseEntity
                 .ok()
@@ -35,7 +42,7 @@ public class ServisController {
         return new ResponseEntity<>(servisService.create(servisDto), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<ServisDto> getServisById(@PathVariable("id") Long id) {
         return ResponseEntity
                 .ok()

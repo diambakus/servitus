@@ -23,7 +23,7 @@ public class Organ implements Serializable {
     @Column(unique = true, nullable = false)
     private String    name;
     @Column(columnDefinition = "text")
-    private String    note;
+    private String    description;
     @EqualsAndHashCode.Exclude
     @ElementCollection
     @CollectionTable(name = "organ_attributes", joinColumns = @JoinColumn(name = "organ_id"))
@@ -40,7 +40,7 @@ public class Organ implements Serializable {
     public Organ(Organ organ) {
         this.id = organ.getId();
         this.name = organ.getName();
-        this.note = organ.getNote();
+        this.description = organ.getDescription();
         this.created = organ.getCreated();
         this.modified = organ.getModified();
         this.active = organ.getActive();

@@ -22,7 +22,7 @@ public class Unit implements Serializable {
     @Column(unique = true, nullable = false)
     private String    name;
     @Column(columnDefinition = "text")
-    private String    note;
+    private String    description;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_organ")
     private Organ     organ;
@@ -48,8 +48,8 @@ public class Unit implements Serializable {
         return name;
     }
 
-    public String getNote() {
-        return note;
+    public String getDescription() {
+        return description;
     }
 
     public LocalDate getCreated() {
@@ -84,8 +84,8 @@ public class Unit implements Serializable {
         this.name = name;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setOrgan(Organ organ) {
