@@ -1,20 +1,3 @@
-spring:
-  jpa:
-    show-sql: true
-    ddl-auto: none
-    defer-datasource-initialization: false
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
-        default_schema: schemakumpo
-    hibernate:
-      ddl-auto: update
-  sql:
-    init:
-      mode: always
-
-
 #  security:
 #    user:
 #      roles: xxx
