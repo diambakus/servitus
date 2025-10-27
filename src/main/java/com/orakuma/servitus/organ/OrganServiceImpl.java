@@ -1,7 +1,7 @@
 package com.orakuma.servitus.organ;
 
-import com.orakuma.servitus.address.AddressService;
 import com.orakuma.servitus.utils.RepositoriesHandler;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,25 +10,12 @@ import java.util.*;
 
 
 @Service
-@Transactional
+@AllArgsConstructor
 public class OrganServiceImpl implements OrganService {
 
     private final OrganRepository     organRepository;
     private final OrganMapper         organMapper;
     private final RepositoriesHandler repositoriesHandler;
-    private final AddressService      addressService;
-
-    public OrganServiceImpl(
-                            final OrganRepository organRepository,
-                            final OrganMapper organMapper,
-                            final RepositoriesHandler repositoriesHandler,
-                            final AddressService addressService
-    ) {
-        this.organRepository = organRepository;
-        this.organMapper = organMapper;
-        this.repositoriesHandler = repositoriesHandler;
-        this.addressService = addressService;
-    }
 
     @Override
     public Iterable<OrganDto> gets() {
@@ -41,16 +28,18 @@ public class OrganServiceImpl implements OrganService {
     }
 
     @Override
+    @Transactional
     public Optional<OrganDto> persist(OrganDto organDto) {
-        var category = organMapper.toOrgan(organDto);
+        Organ organ = organMapper.toOrgan(organDto);
         if (organDto.id() == null || !organRepository.existsById(organDto.id())) {
-            category.setCreated(LocalDate.now());
-            category.setActive(true);
+            organ.setCreated(LocalDate.now());
+            organ.setActive(true);
         } else {
-            category.setModified(LocalDate.now());
+            organ.setModified(LocalDate.now());
         }
 
-        OrganDto persistedCategoryDto = organMapper.toOrganDto(organRepository.save(category));
+        Organ persistedOrgan = organRepository.save(organ);
+        OrganDto persistedCategoryDto = organMapper.toOrganDto(persistedOrgan);
         return Optional.ofNullable(persistedCategoryDto);
     }
 
@@ -63,6 +52,7 @@ public class OrganServiceImpl implements OrganService {
     }
 
     @Override
+    @Transactional
     public int inactivate(Long organId) {
         if (!organRepository.existsById(organId)) {
             return -1;
@@ -76,41 +66,10 @@ public class OrganServiceImpl implements OrganService {
         }
     }
 
-    @Override
-    public Optional<OrganDto> saveAttributes(Long id, Map<String, String> newAttributes) {
-        Organ organ = repositoriesHandler.getOrganById(id);
-
-        newAttributes.forEach((key, value) -> {
-            if (!value.equals(organ.getAttributes().get(key))) {
-                organ.getAttributes().put(key, value);
-            }
-        });
-
-        organ.setModified(LocalDate.now());
-        Organ persisted = organRepository.save(organ);
-        return Optional.ofNullable(organMapper.toOrganDto(persisted));
-    }
-
-    private Organ makeInactive(Long organId) {
+    private void makeInactive(Long organId) {
         Organ organ = repositoriesHandler.getOrganById(organId);
         organ.setActive(false);
         organ.setModified(LocalDate.now());
         organRepository.save(organ);
-        return organ;
-    }
-
-    @Override
-    public OrganDto updateOrganWithProperties(Long id, Map<String, String> newAttributes) {
-        Organ organ = repositoriesHandler.getOrganById(id);
-
-        newAttributes.forEach((key, value) -> {
-            if (!value.equals(organ.getAttributes().get(key))) {
-                organ.getAttributes().put(key, value);
-            }
-        });
-
-        organ.setModified(LocalDate.now());
-        Organ updatedOrgan = organRepository.save(organ);
-        return organMapper.toOrganDto(updatedOrgan);
     }
 }

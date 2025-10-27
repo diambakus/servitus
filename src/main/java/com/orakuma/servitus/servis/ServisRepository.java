@@ -1,29 +1,57 @@
 package com.orakuma.servitus.servis;
 
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 public interface ServisRepository extends CrudRepository<Servis, Long> {
-    @Query(value = "select * from servis s where s.active = true", nativeQuery = true)
+    @Query("select s " +
+            "from Servis s " +
+            "where s.active = true")
     List<Servis> findAllActive();
-    @Query(value = "select * from servis s where s.active = true AND s.fk_unit = :unitId", nativeQuery = true)
-    List<Servis> findAllActiveByUnit(Long unitId);
-    @Query(value = "SELECT * FROM servis i INNER JOIN units u ON i.fk_unit = u.id WHERE i.active AND u.fk_organ = :organId", nativeQuery = true)
-    List<Servis> findByOrgan(Long organId);
-    @Query(value = "SELECT * FROM servis i INNER JOIN units u ON i.fk_unit = u.id WHERE i.active AND u.fk_organ = :organId " +
-            "AND u.id = :unitId", nativeQuery = true)
-    List<Servis> findByUnitAndOrgan(Long unitId, Long organId);
-    @Query(value = "select * from servis i where i.active = false AND i.fk_unit = :unitId", nativeQuery = true)
-    List<Servis> findAllInactiveByUnit(Long unitId);
-    @Modifying
-    @Query(value = "delete from requisites where servis_id = :servisId and position in :requisitePositions", nativeQuery = true)
-    void deleteRequisitesBy(@Param("servisId") Long servisId, @Param("requisitePositions") Set<Integer> requisitePositions);
-    @Modifying
-    @Query(value = "insert into requisites values (:servisId, :key, :value)", nativeQuery = true)
-    void insertRequisites(@Param("servisId") Long servisId, @Param("key") Integer key, @Param("value") String value);
+    @Query("""
+        select s
+        from Servis s
+        inner join s.units u
+        where u.id = :unitId
+          and s.active
+    """)
+    List<Servis> findAllActiveByUnit(@Param("unitId") Long unitId);
+
+    @Query("""
+        select s
+        from Servis s
+        inner join s.units u
+        where u.organ.id = :organId
+            and s.active
+    """)
+    List<Servis> findByOrgan(@Param("organId") Long organId);
+    @Query("""
+        select s
+        from Servis s
+        inner join s.units u
+        where u.id = :unitId 
+            and u.organ.id = :organId
+            and s.active
+    """)
+    List<Servis> findByUnitAndOrgan(@Param("unitId") Long unitId, @Param("organId") Long organId);
+    @Query("""
+        select s
+        from Servis s
+        inner join s.units u
+        where u.id = :unitId
+            and s.active = false
+    """)
+    List<Servis> findAllInactiveByUnit(@Param("unitId") Long unitId);
+
+    @Query("""
+        select s
+        from Servis s
+        left join fetch s.dependencies
+        where s.id = :id
+    """)
+    Optional<Servis> findWithDependenciesById(@Param("id") Long id);
 }

@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(fluent = true, chain = true)
 @Entity
-@Table(name = "contacts_entities")
+@Table(name = "contacts_entities", schema = "servitus")
 public class EntityContact {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_entity_gen")

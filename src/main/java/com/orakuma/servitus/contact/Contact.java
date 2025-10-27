@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @ToString
 @Accessors(chain = true)
 @Entity
-@Table(name = "contacts")
+@Table(name = "contacts", schema = "servitus")
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_gen")

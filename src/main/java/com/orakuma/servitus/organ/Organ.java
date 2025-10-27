@@ -5,15 +5,13 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "organs")
+@Table(name = "organs", schema = "servitus")
 public class Organ implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "org_seq")
@@ -24,12 +22,6 @@ public class Organ implements Serializable {
     private String    name;
     @Column(columnDefinition = "text")
     private String    description;
-    @EqualsAndHashCode.Exclude
-    @ElementCollection
-    @CollectionTable(name = "organ_attributes", joinColumns = @JoinColumn(name = "organ_id"))
-    @MapKeyColumn(name = "property")
-    @Column(name = "property_value")
-    private Map<String, String> attributes = new LinkedHashMap<>();
     private LocalDate created;
     private LocalDate modified;
     private Boolean   active;
@@ -44,18 +36,5 @@ public class Organ implements Serializable {
         this.created = organ.getCreated();
         this.modified = organ.getModified();
         this.active = organ.getActive();
-        this.attributes = new LinkedHashMap<>(organ.getAttributes());
-    }
-
-    public Map<String, String> getAttributes() {
-        return new LinkedHashMap<>(attributes);
-    }
-
-    public void setAttributes(Map<String, String> attributes) {
-        if (attributes == null) {
-            this.attributes = new LinkedHashMap<>();
-        } else {
-            this.attributes = new LinkedHashMap<>(attributes);
-        }
     }
 }

@@ -1,21 +1,19 @@
 package com.orakuma.servitus.servis;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.orakuma.servitus.dependency.DependencyDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @RestController
 @RequestMapping("servis")
 public class ServisController {
     private final ServisService servisService;
-    private static final Logger LOG = LoggerFactory.getLogger(ServisController.class);
 
     public ServisController(ServisService servisService) {
         this.servisService = servisService;
@@ -50,19 +48,19 @@ public class ServisController {
                 .body(servisService.get(id));
     }
 
-    @PatchMapping(value = "{id}/add-requisites")
-    public ResponseEntity<ServisDto> addToUnits(@PathVariable("id") Long id, @RequestBody Map<Integer, String> requisites) {
+    @GetMapping("/{id}/dependencies")
+    public ResponseEntity<Set<DependencyDto>> getDependencies(@PathVariable("id") Long id) {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(servisService.addRequisites(id, requisites));
+                .body(servisService.getDependenciesForServis(id));
     }
 
-    @PatchMapping(value = "{id}/remove-requisites")
-    public ResponseEntity<?> removeFromUnits(@PathVariable("id") Long id, @RequestBody Set<Integer> requisitesPositions) {
-        LOG.info("Removing requisites (with listed positions) from the servis: {}", requisitesPositions.toString());
-        servisService.removeRequisites(id, requisitesPositions);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping("/{id}/dependencies")
+    public ResponseEntity<Void> addDependencies(@PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(servisService.addDependencies(id, dependenciesId));
     }
-
 }

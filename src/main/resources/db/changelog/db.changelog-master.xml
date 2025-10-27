@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <property name="kumpoSchemaName" value="schemakumpo"/>
+    <property name="schemaName" value="servitus"/>
 
     <include file="/changelogs/CREATE_ORGAN.xml" relativeToChangelogFile="true" />
     <include file="/changelogs/CREATE_UNIT.xml" relativeToChangelogFile="true" />
@@ -14,4 +14,5 @@
     <include file="/changelogs/CREATE_ADDRESS_ENTITY.xml" relativeToChangelogFile="true" />
     <include file="/changelogs/CREATE_CONTACT.xml" relativeToChangelogFile="true" />
     <include file="/changelogs/CREATE_CONTACT_ENTITY.xml" relativeToChangelogFile="true" />
+    <include file="/changelogs/CREATE_DEPENDENCY.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>

@@ -1,5 +1,6 @@
 package com.orakuma.servitus.servis;
 
+import com.orakuma.servitus.dependency.DependencyEntity;
 import com.orakuma.servitus.unit.Unit;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,8 +11,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@Table(name ="servis")
-@EqualsAndHashCode(exclude = {"units", "requisites"})
+@Table(name ="servis", schema = "servitus")
 @ToString
 @Getter
 @Setter
@@ -40,11 +40,15 @@ public class Servis implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "unit_id")
     )
     private Set<Unit> units = new HashSet<>();
-    @ElementCollection
-    @CollectionTable(name = "requisites", joinColumns = @JoinColumn(name = "servis_id"))
-    @MapKeyColumn(name = "position")
-    @Column(name = "title")
-    private Map<Integer, String> requisites = new LinkedHashMap<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "servis_dependency",
+            joinColumns = @JoinColumn(name = "servis_id"),
+            inverseJoinColumns = @JoinColumn(name = "dependency_id")
+    )
+    @OrderBy("position ASC")
+    @Setter(AccessLevel.NONE)
+    private Set<DependencyEntity> dependencies = new LinkedHashSet<>();
 
     public Servis() {
     }
@@ -59,10 +63,6 @@ public class Servis implements Serializable {
         unit.getServisSet().remove(this);
     }
 
-    public Map<Integer, String> getRequisites() {
-        return new LinkedHashMap<>(this.requisites);
-    }
-
     public void setUnits(Set<Unit> units) {
         this.units.clear();
         if (units != null) {
@@ -74,12 +74,15 @@ public class Servis implements Serializable {
         return Collections.unmodifiableSet(this.units);
     }
 
-    public Servis setRequisites(Map<Integer, String> requisites) {
-        if (requisites == null) {
-            this.requisites = new LinkedHashMap<>();
-        } else {
-            this.requisites = new LinkedHashMap<>(requisites);
-        }
-        return this;
+    public Set<DependencyEntity> getDependencies() {
+        return Collections.unmodifiableSet(this.dependencies);
+    }
+
+    public void addDependency(DependencyEntity dependencyEntity) {
+        dependencies.add(dependencyEntity);
+    }
+
+    public void removeDependency(DependencyEntity dependency) {
+        dependencies.remove(dependency);
     }
 }

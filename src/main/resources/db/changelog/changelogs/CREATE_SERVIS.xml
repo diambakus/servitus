@@ -5,16 +5,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="create-schema" author="adruida">
-        <sql>CREATE SCHEMA IF NOT EXISTS "schemakumpo";</sql>
-    </changeSet>
     <changeSet id="1" author="adruida">
         <createSequence sequenceName="servis_seq" startValue="1" incrementBy="1"/>
     </changeSet>
 
     <!-- Create the units table -->
     <changeSet id="2" author="adruida">
-        <createTable tableName="servis" schemaName="${kumpoSchemaName}">
+        <createTable tableName="servis" schemaName="${schemaName}">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -39,7 +36,7 @@
     </changeSet>
 
     <changeSet id="3" author="adruida">
-        <createTable tableName="requisites" schemaName="${kumpoSchemaName}">
+        <createTable tableName="requisites" schemaName="${schemaName}">
             <column name="servis_id" type="BIGINT">
                 <constraints nullable="false" foreignKeyName="fk_requisites_servis" references="servis(id)"/>
             </column>
@@ -56,6 +53,13 @@
     </changeSet>
     <changeSet id="5-delete-column-requester" author="adruida">
         <dropColumn tableName="servis" columnName="requester" />
+    </changeSet>
+    <changeSet id="6-drop-requisites_table" author="adruida" failOnError="false">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="requisites"/>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="requisites" constraintName="fk_requisites_servis" />
+        <dropTable tableName="requisites" cascadeConstraints="true" schemaName="${schemaName}"/>
     </changeSet>
 
 </databaseChangeLog>

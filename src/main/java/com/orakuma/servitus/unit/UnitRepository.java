@@ -3,22 +3,28 @@ package com.orakuma.servitus.unit;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface UnitRepository extends CrudRepository<Unit, Long>, PagingAndSortingRepository<Unit, Long> {
-    @Query(value = "SELECT * from units u where u.fk_organ = :organId", nativeQuery = true)
-    List<Unit> findUnitsByOrgan(Long organId);
-    @Query(value = "SELECT * from units u where u.active = true and u.fk_organ = :organId", nativeQuery = true)
-    List<Unit> findActiveUnitsByOrgan(Long organId);
-    @Query(value = "SELECT * from units u where u.active = false and u.fk_organ = :organId", nativeQuery = true)
-    List<Unit> findInactiveUnitsByOrgan(Long organId);
-    @Query(value = "select count(*) from items item where item.fk_unit = :unitId", nativeQuery = true)
-    int countByAssociatedServices(Long unitId);
-    @Query(value = "select * from units u where u.active = true", nativeQuery = true)
+    @Query("SELECT u from Unit u where u.organ.id = :organId")
+    List<Unit> findUnitsByOrgan(@Param("organId") Long organId);
+    @Query("SELECT u from Unit u where u.organ.id = :organId and u.active")
+    List<Unit> findActiveUnitsByOrgan(@Param("organId") Long organId);
+    @Query("SELECT u from Unit u where u.organ.id = :organId and u.active = false")
+    List<Unit> findInactiveUnitsByOrgan(@Param("organId") Long organId);
+    @Query("""
+        select count(s)
+        from Servis s
+        inner join s.units u
+        where u.id = :unitId
+    """)
+    int countByAssociatedServices(@Param("unitId") Long unitId);
+    @Query("select u from Unit u where u.active")
     List<Unit> findActiveUnits();
-    @Query(value = "select * from units u where u.active = false", nativeQuery = true)
+    @Query("select u from Unit u where u.active = false")
     List<Unit> findInactiveUnits();
 }

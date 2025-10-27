@@ -5,7 +5,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface EntityContactRepository extends CrudRepository<EntityContact, Long> {
-    @Query(value = "select ce.contact_id from contacts_entities ce " +
-            "where ce.entity_id = :entityId and ce.entity_type = :entityType", nativeQuery = true)
+    @Query("select ce.contact.id " +
+            "from EntityContact ce " +
+            "where ce.entityId = :entityId " +
+            "and ce.entityType = :entityType")
     Iterable<Long> findContactIdsByContactIdAndContactType(@Param("entityId") Long entityId, @Param("entityType") String entityType);
 }

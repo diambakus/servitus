@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@Profile("!local")
+@Profile("!noauth")
 public class SecurityConfig {
 
     @Bean

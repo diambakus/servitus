@@ -38,8 +38,12 @@ public class ServisServiceImplTest {
     @BeforeEach
     void setUp() {
         unit = UnitFK.getEntity();
-        servisDto = new ServisDto(1L, "Service1", 100.0, ServisType.SERVICE.name(), "Additional details",
-                Set.of(UnitFK.getDto()), Collections.emptyMap());
+        servisDto = new ServisDto(1L,
+                "Service1",
+                100.0,
+                ServisType.SERVICE.name(),
+                "Additional details",
+                Set.of(UnitFK.getDto()));
         servis = ServisFK.getEntity();
         servis.addUnit(unit);
     }

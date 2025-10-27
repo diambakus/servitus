@@ -9,10 +9,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 
-@EqualsAndHashCode(exclude = {"attributes", "servisSet"})
 @ToString
 @Entity
-@Table(name = "units")
+@Table(name = "units", schema = "servitus")
 public class Unit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_gen")
@@ -26,11 +25,6 @@ public class Unit implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_organ")
     private Organ     organ;
-    @ElementCollection
-    @CollectionTable(name = "unit_attributes", joinColumns = @JoinColumn(name = "unit_id"))
-    @MapKeyColumn(name = "property")
-    @Column(name = "property_value")
-    private Map<String, String> attributes = new LinkedHashMap<>();
     private LocalDate created;
     private LocalDate modified;
     private Boolean   active;
@@ -66,10 +60,6 @@ public class Unit implements Serializable {
 
     public Organ getOrgan() {
         return organ == null ? null : new Organ(organ);
-    }
-
-    public Map<String, String> getAttributes() {
-        return Collections.unmodifiableMap(this.attributes);
     }
 
     public Set<Servis> getServisSet() {
@@ -108,14 +98,6 @@ public class Unit implements Serializable {
         this.active = active;
     }
 
-    public Unit setAttributes(Map<String, String> attributes) {
-        if (attributes == null) {
-            this.attributes = new LinkedHashMap<>();
-        } else {
-            this.attributes = new LinkedHashMap<>(attributes);
-        }
-        return this;
-    }
 
     public void setServisSet(Set<Servis> servisSet) {
         if (servisSet == null) {

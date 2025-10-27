@@ -53,8 +53,7 @@ public class UnitServiceImplTest {
                 1L,
                 "Unit1",
                 "Sample unit",
-                OrganFK.getDto(),
-                UnitFK.getEntity().getAttributes()
+                OrganFK.getDto()
         );
 
         unit = UnitFK.getEntity();
@@ -103,7 +102,7 @@ public class UnitServiceImplTest {
 
     @Test
     void testCreate_Failure_OrganIsNull() {
-        unitDto = new UnitDto(1L, "Unit1", "Sample unit", null, Map.of());
+        unitDto = new UnitDto(1L, "Unit1", "Sample unit", null);
         when(mapper.toUnit(unitDto)).thenReturn(unit);
 
         Exception exception = assertThrows(NullPointerException.class, () -> unitService.create(unitDto));
@@ -179,21 +178,6 @@ public class UnitServiceImplTest {
         int result = unitService.inactivate(1L);
 
         assertEquals(1, result);
-        verify(repository, times(1)).save(unit);
-    }
-
-    @Test
-    void testUpdateUnitWithProperties() {
-        Map<String, String> fieldsContentMap = new LinkedHashMap<>();
-        fieldsContentMap.put("size", "large");
-        when(repositoriesHandler.getUnitById(1L)).thenReturn(unit);
-        when(repository.save(unit)).thenReturn(unit);
-        when(mapper.toUnitDto(unit)).thenReturn(unitDto);
-
-        UnitDto result = unitService.updateUnitWithProperties(1L, fieldsContentMap);
-
-        assertNotNull(result);
-        assertEquals(unitDto, result);
         verify(repository, times(1)).save(unit);
     }
 }

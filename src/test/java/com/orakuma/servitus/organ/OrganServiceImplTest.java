@@ -3,7 +3,6 @@ package com.orakuma.servitus.organ;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import com.orakuma.servitus.fake.OrganFK;
@@ -80,7 +79,7 @@ public class OrganServiceImplTest {
 
     @Test
     void testPersist_ExistingOrgan() {
-        organDto = new OrganDto(1L, "Heart", "note", new HashMap<>(), "content");
+        organDto = new OrganDto(1L, "Heart", "note", "content");
         when(organMapper.toOrgan(organDto)).thenReturn(organ);
         when(organRepository.existsById(1L)).thenReturn(true);
         when(organRepository.save(organ)).thenReturn(organ);
@@ -146,35 +145,6 @@ public class OrganServiceImplTest {
         int result = organService.inactivate(1L);
 
         assertEquals(1, result);
-        verify(organRepository, times(1)).save(organ);
-    }
-
-    @Test
-    void testSaveAttributes() {
-        Map<String, String> attributes = new HashMap<>();
-        attributes.put("color", "red");
-        when(repositoriesHandler.getOrganById(1L)).thenReturn(organ);
-
-        Optional<OrganDto> result = organService.saveAttributes(1L, attributes);
-
-        assertFalse(result.isPresent());
-        assertEquals("red", organ.getAttributes().get("color"));
-        verify(repositoriesHandler, times(1)).getOrganById(1L);
-    }
-
-    @Test
-    void testUpdateOrganWithProperties() {
-        Map<String, String> fieldsContentMap = new HashMap<>();
-        fieldsContentMap.put("size", "large");
-        fieldsContentMap.put("color", "green");
-        when(repositoriesHandler.getOrganById(1L)).thenReturn(organ);
-        when(organRepository.save(organ)).thenReturn(organ);
-        when(organMapper.toOrganDto(organ)).thenReturn(organDto);
-
-        OrganDto result = organService.updateOrganWithProperties(1L, fieldsContentMap);
-
-        assertNotNull(result);
-        assertEquals(organDto, result);
         verify(organRepository, times(1)).save(organ);
     }
 }

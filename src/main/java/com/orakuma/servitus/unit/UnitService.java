@@ -3,7 +3,6 @@ package com.orakuma.servitus.unit;
 import com.orakuma.servitus.organ.OrganDto;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface UnitService {
@@ -13,5 +12,4 @@ public interface UnitService {
     List<UnitDto> getByOrgan(Long id);
     OrganDto getOrgan(Long unitId);
     int inactivate(Long unitId);
-    UnitDto updateUnitWithProperties(Long id, Map<String, String> fieldsContentMap);
 }

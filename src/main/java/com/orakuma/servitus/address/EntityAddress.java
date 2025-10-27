@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Entity
 @Accessors(fluent = true, chain = true)
-@Table(name = "addresses_entities")
+@Table(name = "addresses_entities", schema = "servitus")
 public class EntityAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_entities_gen")

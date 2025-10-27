@@ -4,6 +4,7 @@ import com.orakuma.servitus.utils.EntityTypeConverter;
 import com.orakuma.servitus.utils.RepositoriesHandler;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -44,6 +45,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    @Transactional
     public Optional<ContactDto> addContact(Long entityId, String entityType, ContactDto contactDto) {
         Contact contact = contactMapper.toEntity(contactDto).setCreated(LocalDateTime.now());
         contact = contactRepository.save(contact);
@@ -56,6 +58,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    @Transactional
     public Optional<ContactDto> update(Long contactId, Map<String, Object> updatingPropertiesMap) {
         Contact contact = repositoriesHandler.getContactById(contactId);
         updatingPropertiesMap.forEach((key, value) -> {

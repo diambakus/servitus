@@ -5,13 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="create-schema" author="adruida">
-        <sql>CREATE SCHEMA IF NOT EXISTS "schemakumpo";</sql>
-    </changeSet>
     <changeSet id="1" author="adruida">
         <createSequence sequenceName="contact_seq" startValue="1" incrementBy="1"/>
 
-        <createTable tableName="contacts" schemaName="${kumpoSchemaName}">
+        <createTable tableName="contacts" schemaName="${schemaName}">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

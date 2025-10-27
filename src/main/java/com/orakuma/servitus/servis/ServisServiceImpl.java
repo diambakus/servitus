@@ -1,29 +1,26 @@
 package com.orakuma.servitus.servis;
 
+import com.orakuma.servitus.dependency.DependencyDto;
+import com.orakuma.servitus.dependency.DependencyEntity;
+import com.orakuma.servitus.dependency.DependencyMapper;
+import com.orakuma.servitus.dependency.DependencyRepository;
 import com.orakuma.servitus.unit.Unit;
 import com.orakuma.servitus.utils.RepositoriesHandler;
-import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
 
 @Service
-@Transactional
+@AllArgsConstructor
 public class ServisServiceImpl implements ServisService {
     private final ServisRepository    servisRepository;
     private final ServisMapper        servisMapper;
     private final RepositoriesHandler repositoriesHandler;
-
-    public ServisServiceImpl(
-            final ServisRepository servisRepository,
-            final ServisMapper servisMapper,
-            final RepositoriesHandler repositoriesHandler
-    ) {
-        this.servisRepository = servisRepository;
-        this.servisMapper = servisMapper;
-        this.repositoriesHandler = repositoriesHandler;
-    }
+    private final DependencyMapper dependencyMapper;
+    private final DependencyRepository dependencyRepository;
 
     @Override
     public ServisDto get(Long servisId) {
@@ -48,6 +45,7 @@ public class ServisServiceImpl implements ServisService {
     }
 
     @Override
+    @Transactional
     public ServisDto create(ServisDto servisDto) {
         Servis servis = servisMapper.toServis(servisDto);
 
@@ -66,6 +64,7 @@ public class ServisServiceImpl implements ServisService {
     }
 
     @Override
+    @Transactional
     public ServisDto update(Long servisId, Map<String, Object> fields) {
         Servis servis = repositoriesHandler.getServisById(servisId);
         fields.forEach((key, value) -> {
@@ -100,27 +99,28 @@ public class ServisServiceImpl implements ServisService {
     }
 
     @Override
-    public ServisDto addRequisites(Long servisId, Map<Integer, String> newRequisites) {
-        Servis servis = repositoriesHandler.getServisById(servisId);
-
-        newRequisites.forEach((key, value) -> {
-            servisRepository.insertRequisites(servisId, key, value);
-        });
-
-        servis.setModified(LocalDate.now());
-        Servis persistedServis = servisRepository.save(servis);
-        return servisMapper.toServisDto(persistedServis);
-    }
-
-    @Override
-    public void removeRequisites(Long servisId, Set<Integer> chosenRequisites) {
-        Servis servis = repositoriesHandler.getServisById(servisId);
-        servisRepository.deleteRequisitesBy(servisId, chosenRequisites);
-        servisRepository.save(servis);
-    }
-
-    @Override
     public ServisDto removeUnits(Long servisId, List<Long> unitId) {
+        return null;
+    }
+
+    @Override
+    public Set<DependencyDto> getDependenciesForServis(Long id) {
+        Optional<Servis> servis = servisRepository.findWithDependenciesById(id);
+        LinkedHashSet<DependencyEntity> dependencyEntities = new LinkedHashSet<>();
+        servis.ifPresent(servisEntity -> dependencyEntities.addAll(servisEntity.getDependencies()));
+        return dependencyMapper.toDto(dependencyEntities);
+    }
+
+    @Override
+    @Transactional
+    public Void addDependencies(Long id, LinkedHashSet<Long> dependenciesId) {
+        Servis servis = repositoriesHandler.getServisById(id);
+        Iterable<DependencyEntity> chosenDependenciesEntries = dependencyRepository.findAllById(dependenciesId);
+        for (DependencyEntity dependencyEntity : chosenDependenciesEntries) {
+           servis.addDependency(dependencyEntity);
+        }
+        servisRepository.save(servis);
+
         return null;
     }
 }

@@ -5,7 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface EntityAddressRepository extends CrudRepository<EntityAddress, Long> {
-    @Query(value = "select ea.address_id from addresses_entities ea where ea.entity_id = :entityId " +
-            "and ea.entity_type=:entityType", nativeQuery = true)
+    @Query("select ea.address.id from EntityAddress ea " +
+            "where ea.entityId = :entityId " +
+            "and ea.entityType=:entityType")
     Iterable<Long> findAddressesByEntityId(@Param("entityId") Long entityId, @Param("entityType") String entityType);
 }

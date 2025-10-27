@@ -1,8 +1,8 @@
 package com.orakuma.servitus.servis;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.orakuma.servitus.dependency.DependencyDto;
+
+import java.util.*;
 
 public interface ServisService {
     ServisDto get(Long servisId);
@@ -14,7 +14,7 @@ public interface ServisService {
     void delete(Long servisId);
     List<ServisDto> getByUnit(Long unitId);
     List<ServisDto> getAllActive();
-    ServisDto addRequisites(Long servisId, Map<Integer, String> newRequisites);
-    void removeRequisites(Long servisId, Set<Integer> newRequisites);
     ServisDto removeUnits(Long servisId, List<Long> unitId);
+    Set<DependencyDto> getDependenciesForServis(Long id);
+    Void addDependencies(Long id, LinkedHashSet<Long> dependenciesId);
 }

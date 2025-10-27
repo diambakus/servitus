@@ -6,7 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -41,17 +40,6 @@ public class OrganController {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(organDto);
-    }
-
-    @PatchMapping("/{id}")
-    @ApiResponse(responseCode = "200", description = "Updates organisation information")
-    public ResponseEntity<Optional<OrganDto>> update(
-            @PathVariable("id") Long id,
-            @RequestBody Map<String, String> fieldsContentMap) {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Optional.of(organService.updateOrganWithProperties(id, fieldsContentMap)));
     }
 
     @PatchMapping("/inactivate/{id}")

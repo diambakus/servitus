@@ -4,6 +4,7 @@ import com.orakuma.servitus.utils.EntityTypeConverter;
 import com.orakuma.servitus.utils.RepositoriesHandler;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public Optional<AddressDto> addAddress(Long entityId, String entityType, AddressDto addressDto) {
         Address address = addressMapper.toAddress(addressDto).setCreated(LocalDateTime.now());
         address = addressRepository.save(address);
@@ -51,6 +53,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public Optional<AddressDto> update(Long addressId, Map<String, Object> updatingFieldsValue) {
         Address address = repositoriesHandler.getAddressById(addressId);
         updatingFieldsValue.forEach((key, value) -> {

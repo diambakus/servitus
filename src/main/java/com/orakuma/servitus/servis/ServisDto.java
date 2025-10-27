@@ -10,12 +10,15 @@ public record ServisDto(
         Double price,
         String servisType,
         String description,
-        Set<UnitDto> unitsDto,
-        Map<Integer, String> requisites
+        Set<UnitDto> unitsDto
 ) {
 
-    public ServisDto(Long id, String name, Double price, String servisType, String description,
-                     Set<UnitDto> unitsDto, Map<Integer, String> requisites
+    public ServisDto(Long id,
+                     String name,
+                     Double price,
+                     String servisType,
+                     String description,
+                     Set<UnitDto> unitsDto
     ) {
         this.id = id;
         this.name = name;
@@ -23,16 +26,10 @@ public record ServisDto(
         this.servisType = servisType;
         this.description = description;
         this.unitsDto = unitsDto == null ? Collections.emptySet() : unitsDto;
-        this.requisites = requisites == null ? Collections.emptyMap() : new LinkedHashMap<>(requisites);
     }
 
     @Override
     public Set<UnitDto> unitsDto() {
         return new HashSet<>(unitsDto);
-    }
-
-    @Override
-    public Map<Integer, String> requisites() {
-        return new LinkedHashMap<>(requisites);
     }
 }
