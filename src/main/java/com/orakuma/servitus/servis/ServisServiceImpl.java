@@ -7,6 +7,7 @@ import com.orakuma.servitus.dependency.DependencyRepository;
 import com.orakuma.servitus.unit.Unit;
 import com.orakuma.servitus.utils.RepositoriesHandler;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ServisServiceImpl implements ServisService {
     private final ServisRepository    servisRepository;
     private final ServisMapper        servisMapper;
@@ -47,6 +49,7 @@ public class ServisServiceImpl implements ServisService {
     @Override
     @Transactional
     public ServisDto create(ServisDto servisDto) {
+        log.info("Create Servis: {}", servisDto);
         Servis servis = servisMapper.toServis(servisDto);
 
         servisDto.unitsDto().forEach(unitDto -> {
@@ -114,6 +117,7 @@ public class ServisServiceImpl implements ServisService {
     @Override
     @Transactional
     public Void addDependencies(Long id, LinkedHashSet<Long> dependenciesId) {
+        log.info("Adding dependencies for servis: {}", id);
         Servis servis = repositoriesHandler.getServisById(id);
         Iterable<DependencyEntity> chosenDependenciesEntries = dependencyRepository.findAllById(dependenciesId);
         for (DependencyEntity dependencyEntity : chosenDependenciesEntries) {
@@ -121,6 +125,17 @@ public class ServisServiceImpl implements ServisService {
         }
         servisRepository.save(servis);
 
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Void removeDependencies(Long id, LinkedHashSet<Long> dependenciesId) {
+        log.info("Removing dependencies for servis: {}", id);
+        Servis servis = repositoriesHandler.getServisById(id);
+        Iterable<DependencyEntity> chosenDependenciesEntries = dependencyRepository.findAllById(dependenciesId);
+        chosenDependenciesEntries.forEach(servis::removeDependency);
+        servisRepository.save(servis);
         return null;
     }
 }

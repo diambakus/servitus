@@ -8,4 +8,5 @@ public interface DependencyService {
     Optional<DependencyDto> update(DependencyDto dependencyDto);
     LinkedHashSet<DependencyDto> fetchAll();
     Optional<DependencyDto> deactivate(Long id);
+    LinkedHashSet<DependencyDto> getDependenciesToAddByServisId(Long id);
 }

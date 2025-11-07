@@ -56,11 +56,19 @@ public class ServisController {
                 .body(servisService.getDependenciesForServis(id));
     }
 
-    @PostMapping("/{id}/dependencies")
+    @PostMapping("/{id}/dependencies/add")
     public ResponseEntity<Void> addDependencies(@PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(servisService.addDependencies(id, dependenciesId));
+    }
+
+    @PostMapping("/{id}/dependencies/remove")
+    public ResponseEntity<Void> removeDependencies(@PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(servisService.removeDependencies(id, dependenciesId));
     }
 }

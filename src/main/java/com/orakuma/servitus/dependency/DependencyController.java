@@ -24,6 +24,11 @@ public class DependencyController {
         return new ResponseEntity<>(dependencyService.fetchAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/servis/{servisId}")
+    public ResponseEntity<LinkedHashSet<DependencyDto>> getAllToAddByServis(@PathVariable("servisId") Long servisId) {
+        return new ResponseEntity<>(dependencyService.getDependenciesToAddByServisId(servisId), HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<Optional<DependencyDto>> deactivate(@PathVariable("id") Long id) {
         return new ResponseEntity<>(dependencyService.deactivate(id), HttpStatus.OK);

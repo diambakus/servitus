@@ -17,4 +17,5 @@ public interface ServisService {
     ServisDto removeUnits(Long servisId, List<Long> unitId);
     Set<DependencyDto> getDependenciesForServis(Long id);
     Void addDependencies(Long id, LinkedHashSet<Long> dependenciesId);
+    Void removeDependencies(Long id, LinkedHashSet<Long> dependenciesId);
 }
