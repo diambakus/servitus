@@ -5,9 +5,11 @@ import com.orakuma.servitus.address.AddressService;
 import com.orakuma.servitus.contact.ContactDto;
 import com.orakuma.servitus.contact.ContactService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -20,16 +22,10 @@ import static com.orakuma.servitus.utils.EntityTypeConverter.UNIT_ENTITY_TYPE;
 
 @RestController
 @RequestMapping(value = "unit")
+@AllArgsConstructor
 public class UnitDetailsController {
     private final AddressService addressService;
     private final ContactService contactService;
-
-    UnitDetailsController(
-            AddressService addressService,
-            ContactService contactService) {
-        this.addressService = addressService;
-        this.contactService = contactService;
-    }
 
     @GetMapping("/address/{unitId}")
     @ApiResponse(responseCode = "200", description = "Fetch addresses by unit")
@@ -43,6 +39,7 @@ public class UnitDetailsController {
 
     @PostMapping("/address/{unitId}")
     @ApiResponse(responseCode = "201", description = "Enhance addresses to the unit")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Iterable<AddressDto>> addAddress(
             @PathVariable("unitId") Long unitId,
             @RequestBody Iterable<AddressDto> addressesDto) {
@@ -52,6 +49,7 @@ public class UnitDetailsController {
 
     @PatchMapping("/address/{id}")
     @ApiResponse(responseCode = "200", description = "Update an address information")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Optional<AddressDto>> updateAddress(
             @PathVariable("id") Long id,
             @RequestBody Map<String, Object> fieldsValues) {
@@ -74,6 +72,7 @@ public class UnitDetailsController {
 
     @PostMapping("/contact/{unitId}")
     @ApiResponse(responseCode = "201", description = "Enhance contacts to the unit")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Iterable<ContactDto>> addContact(
             @PathVariable("unitId") Long unitId,
             @RequestBody Iterable<ContactDto> contacts) {
@@ -86,6 +85,7 @@ public class UnitDetailsController {
 
     @PatchMapping("/contact/{id}")
     @ApiResponse(responseCode = "200", description = "Update a contact information")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Optional<ContactDto>> updateContact(
             @PathVariable("id") Long id,
             @RequestBody Map<String, Object> fieldsValues) {

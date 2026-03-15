@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class UnitController {
 
     @PostMapping
     @ApiResponse(responseCode = "201", description = "Registers new Unit")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Optional<UnitDto>> post(@RequestBody UnitDto unitDto) {
         return new ResponseEntity<>(unitService.create(unitDto), HttpStatus.CREATED);
     }
@@ -55,6 +57,7 @@ public class UnitController {
 
     @PatchMapping(value = "/{unitId}")
     @ApiResponse(responseCode = "200", description = "Given unit Id, inactivate the unit")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Integer> inactive(@PathVariable("unitId") Long unitId) {
         int inactivatedUnit = unitService.inactivate(unitId);
         HttpStatus responseStatus = HttpStatus.OK;

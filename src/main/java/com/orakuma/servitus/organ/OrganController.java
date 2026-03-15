@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -28,6 +29,7 @@ public class OrganController {
 
     @PostMapping
     @ApiResponse(responseCode = "201", description = "")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Optional<OrganDto>> create(@RequestBody OrganDto organDto) {
         return new ResponseEntity<>(organService.persist(organDto), HttpStatus.CREATED);
     }

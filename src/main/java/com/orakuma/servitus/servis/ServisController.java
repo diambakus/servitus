@@ -4,6 +4,7 @@ import com.orakuma.servitus.dependency.DependencyDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashSet;
@@ -36,6 +37,7 @@ public class ServisController {
     }
 
     @PostMapping
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<ServisDto> addServis(@RequestBody ServisDto servisDto) {
         return new ResponseEntity<>(servisService.create(servisDto), HttpStatus.CREATED);
     }
@@ -57,6 +59,7 @@ public class ServisController {
     }
 
     @PostMapping("/{id}/dependencies/add")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Void> addDependencies(@PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
         return ResponseEntity
                 .ok()
@@ -65,6 +68,7 @@ public class ServisController {
     }
 
     @PostMapping("/{id}/dependencies/remove")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Void> removeDependencies(@PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
         return ResponseEntity
                 .ok()

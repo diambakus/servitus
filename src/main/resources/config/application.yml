@@ -34,7 +34,7 @@ spring:
         jwt:
           jwk-set-uri: http://localhost:8080/realms/kumpo/protocol/openid-connect/certs
   profiles:
-    active: localdb,noauth
+    active: localdb
 
 
 management:

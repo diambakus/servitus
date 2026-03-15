@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -51,6 +52,7 @@ public class OrganDetailsController {
 
     @PatchMapping("/address/{id}")
     @ApiResponse(responseCode = "200", description = "Update an address information")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Optional<AddressDto>> updateAddress(
             @PathVariable("id") Long id,
             @RequestBody Map<String, Object> fieldsValues) {
@@ -73,6 +75,7 @@ public class OrganDetailsController {
 
     @PostMapping("/contact/{organId}")
     @ApiResponse(responseCode = "201", description = "Enhance contacts to the organisation")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Iterable<ContactDto>> addContact(
             @PathVariable("organId") Long organId,
             @RequestBody Iterable<ContactDto> contacts) {
@@ -82,6 +85,7 @@ public class OrganDetailsController {
 
     @PatchMapping("/contact/{id}")
     @ApiResponse(responseCode = "200", description = "Update a contact information")
+    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
     public ResponseEntity<Optional<ContactDto>> updateContact(@PathVariable("id") Long id, @RequestBody Map<String, Object> fieldsValues) {
         Optional<ContactDto> updatedContact = contactService.update(id, fieldsValues);
         return ResponseEntity
