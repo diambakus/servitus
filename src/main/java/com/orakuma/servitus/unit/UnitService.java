@@ -12,4 +12,6 @@ public interface UnitService {
     List<UnitDto> getByOrgan(Long id);
     OrganDto getOrgan(Long unitId);
     int inactivate(Long unitId);
+    UnitDto getByPublicId(String publicId);
+    void setUnitPublicId(Long id);
 }

@@ -54,4 +54,5 @@ public interface ServisRepository extends CrudRepository<Servis, Long> {
         where s.id = :id
     """)
     Optional<Servis> findWithDependenciesById(@Param("id") Long id);
+    Servis findByPublicId(@Param("publicId") String publicId);
 }

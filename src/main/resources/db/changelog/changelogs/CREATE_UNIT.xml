@@ -73,4 +73,14 @@
     <changeSet id="2" author="adruida">
         <renameColumn tableName="units" oldColumnName="note" newColumnName="description" columnDataType="text"/>
     </changeSet>
+    <changeSet id="3-publicId" author="adruida">
+        <preConditions>
+            <not>
+                <columnExists tableName="units" columnName="public_id" />
+            </not>
+        </preConditions>
+        <addColumn tableName="units">
+            <column name="public_id" type="varchar(255)" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -43,7 +43,8 @@ public class ServisServiceImplTest {
                 100.0,
                 ServisType.SERVICE.name(),
                 "Additional details",
-                Set.of(UnitFK.getDto()));
+                Set.of(UnitFK.getDto()),
+                "ppp");
         servis = ServisFK.getEntity();
         servis.addUnit(unit);
     }

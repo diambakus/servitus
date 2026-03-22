@@ -61,7 +61,7 @@ public class ServisServiceImpl implements ServisService {
 
         servis.setCreated(LocalDate.now());
         servis.setActive(true);
-
+        servis.setPublicId(String.format("srv_%s", UUID.randomUUID()));
         Servis persistedServis = servisRepository.save(servis);
         return servisMapper.toServisDto(persistedServis);
     }
@@ -137,5 +137,25 @@ public class ServisServiceImpl implements ServisService {
         chosenDependenciesEntries.forEach(servis::removeDependency);
         servisRepository.save(servis);
         return null;
+    }
+
+    @Override
+    public ServisDto getServisByPublicId(String publicId) {
+        try {
+            Servis servis = servisRepository.findByPublicId(publicId);
+            return servisMapper.toServisDto(servis);
+        } catch (Exception e) {
+            log.error("Failed to find service with publicId: {}", publicId);
+            throw new RuntimeException(e);
+        }
+    }
+
+    // TODO: temporarily only for already persisted organization without publicId
+    @Transactional
+    @Override
+    public void setServisPublicId(Long id) {
+        Servis servis = repositoriesHandler.getServisById(id);
+        servis.setPublicId(String.format("srv_%s", UUID.randomUUID()));
+        servisRepository.save(servis);
     }
 }

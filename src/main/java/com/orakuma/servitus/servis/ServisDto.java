@@ -10,7 +10,8 @@ public record ServisDto(
         Double price,
         String servisType,
         String description,
-        Set<UnitDto> unitsDto
+        Set<UnitDto> unitsDto,
+        String publicId
 ) {
 
     public ServisDto(Long id,
@@ -18,7 +19,8 @@ public record ServisDto(
                      Double price,
                      String servisType,
                      String description,
-                     Set<UnitDto> unitsDto
+                     Set<UnitDto> unitsDto,
+                     String publicId
     ) {
         this.id = id;
         this.name = name;
@@ -26,6 +28,7 @@ public record ServisDto(
         this.servisType = servisType;
         this.description = description;
         this.unitsDto = unitsDto == null ? Collections.emptySet() : unitsDto;
+        this.publicId = publicId;
     }
 
     @Override

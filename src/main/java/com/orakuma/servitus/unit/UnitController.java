@@ -13,7 +13,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("unit")
+@RequestMapping("units")
 public class UnitController {
     private final UnitService unitService;
 
@@ -37,13 +37,22 @@ public class UnitController {
         return new ResponseEntity<>(unitService.create(unitDto), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/internal/{id}")
     @ApiResponse(responseCode = "200", description = "Get unit by identity")
     public ResponseEntity<Optional<UnitDto>> get(@PathVariable("id") Long id) {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(unitService.getBy(id));
+    }
+
+    @GetMapping(value = "/{publicId}")
+    @ApiResponse(responseCode = "200", description = "Get unit by publicId")
+    public ResponseEntity<UnitDto> getByPublicId(@PathVariable("publicId") String publicId) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(unitService.getByPublicId(publicId));
     }
 
     @GetMapping(value = "/{unitId}/organ")
@@ -67,5 +76,10 @@ public class UnitController {
             responseStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(inactivatedUnit, responseStatus);
+    }
+
+    @PatchMapping("/set-publicId-manually/{id}")
+    public void updateUnitWithPublicId(@PathVariable("id") Long id) {
+        unitService.setUnitPublicId(id);
     }
 }

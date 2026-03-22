@@ -32,6 +32,8 @@ public class Servis implements Serializable {
     private LocalDate created;
     private LocalDate modified;
     private Boolean active;
+    private String publicId;
+
     @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(

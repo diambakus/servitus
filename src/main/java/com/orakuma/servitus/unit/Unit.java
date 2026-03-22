@@ -12,6 +12,8 @@ import java.util.*;
 @ToString
 @Entity
 @Table(name = "units", schema = "servitus")
+@Getter
+@Setter
 public class Unit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_gen")
@@ -30,52 +32,10 @@ public class Unit implements Serializable {
     private Boolean   active;
     @ManyToMany(mappedBy = "units", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Servis> servisSet = new HashSet<>();
-
-    public Unit(){
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public LocalDate getCreated() {
-        return created;
-    }
-
-    public LocalDate getModified() {
-        return modified;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
+    private String publicId;
 
     public Organ getOrgan() {
         return organ == null ? null : new Organ(organ);
-    }
-
-    public Set<Servis> getServisSet() {
-        return new HashSet<>(servisSet);
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public void setOrgan(Organ organ) {
@@ -86,18 +46,9 @@ public class Unit implements Serializable {
         }
     }
 
-    public void setCreated(LocalDate created) {
-        this.created = created;
+    public Set<Servis> getServisSet() {
+        return new HashSet<>(servisSet);
     }
-
-    public void setModified(LocalDate modified) {
-        this.modified = modified;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
 
     public void setServisSet(Set<Servis> servisSet) {
         if (servisSet == null) {

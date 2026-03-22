@@ -15,4 +15,5 @@ public interface OrganRepository extends CrudRepository<Organ, Long> {
     List<Organ> findAllInactive();
     @Query("select count(*) from Unit u where u.organ.id = :organId")
     Long countByAssociatedUnits(@Param("organId") Long organId);
+    Organ findByPublicId(@Param("publicId") String publicId);
 }

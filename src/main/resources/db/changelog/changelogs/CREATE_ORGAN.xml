@@ -55,4 +55,14 @@
         <dropForeignKeyConstraint baseTableName="organ_attributes" constraintName="fk_organ_attributes" />
         <dropTable tableName="organ_attributes" schemaName="${schemaName}" />
     </changeSet>
+    <changeSet id="4-publicId" author="adruida">
+        <preConditions>
+            <not>
+                <columnExists tableName="organs" columnName="public_id" />
+            </not>
+        </preConditions>
+        <addColumn tableName="organs">
+            <column name="public_id" type="varchar(255)" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

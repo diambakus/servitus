@@ -27,4 +27,5 @@ public interface UnitRepository extends CrudRepository<Unit, Long>, PagingAndSor
     List<Unit> findActiveUnits();
     @Query("select u from Unit u where u.active = false")
     List<Unit> findInactiveUnits();
+    Unit findByPublicId(String publicId);
 }

@@ -18,4 +18,6 @@ public interface ServisService {
     Set<DependencyDto> getDependenciesForServis(Long id);
     Void addDependencies(Long id, LinkedHashSet<Long> dependenciesId);
     Void removeDependencies(Long id, LinkedHashSet<Long> dependenciesId);
+    ServisDto getServisByPublicId(String publicId);
+    void setServisPublicId(Long id);
 }

@@ -8,4 +8,6 @@ public interface OrganService {
     Iterable<OrganDto> gets();
     Iterable<OrganDto> getAllInactive();
     int inactivate(Long organId);
+    OrganDto getOrganByPublicId(String publicId);
+    void setOrganPublicId(Long organId);
 }

@@ -79,7 +79,7 @@ public class OrganServiceImplTest {
 
     @Test
     void testPersist_ExistingOrgan() {
-        organDto = new OrganDto(1L, "Heart", "note", "content");
+        organDto = new OrganDto(1L, "Heart", "note", "content", "tttt");
         when(organMapper.toOrgan(organDto)).thenReturn(organ);
         when(organRepository.existsById(1L)).thenReturn(true);
         when(organRepository.save(organ)).thenReturn(organ);

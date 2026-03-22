@@ -42,12 +42,20 @@ public class ServisController {
         return new ResponseEntity<>(servisService.create(servisDto), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/internal/{id}")
     public ResponseEntity<ServisDto> getServisById(@PathVariable("id") Long id) {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(servisService.get(id));
+    }
+
+    @GetMapping("/publicId")
+    public ResponseEntity<ServisDto> getServisByPublicId(@PathVariable("publicId") String publicId) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(servisService.getServisByPublicId(publicId));
     }
 
     @GetMapping("/{id}/dependencies")
@@ -74,5 +82,10 @@ public class ServisController {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(servisService.removeDependencies(id, dependenciesId));
+    }
+
+    @PatchMapping("/set-publicId-manually/{id}")
+    public void updateServisWithPublicId(@PathVariable("id") Long id) {
+        servisService.setServisPublicId(id);
     }
 }

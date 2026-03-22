@@ -61,5 +61,15 @@
         <dropForeignKeyConstraint baseTableName="requisites" constraintName="fk_requisites_servis" />
         <dropTable tableName="requisites" cascadeConstraints="true" schemaName="${schemaName}"/>
     </changeSet>
+    <changeSet id="7-publicId" author="adruida">
+        <preConditions>
+            <not>
+                <columnExists tableName="servis" columnName="public_id" />
+            </not>
+        </preConditions>
+        <addColumn tableName="servis">
+            <column name="public_id" type="varchar(255)" />
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
