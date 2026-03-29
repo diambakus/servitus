@@ -10,6 +10,7 @@ public interface UnitService {
     Optional<UnitDto> create(UnitDto unitDto);
     Optional<UnitDto> getBy(Long id);
     List<UnitDto> getByOrgan(Long id);
+    List<UnitDto> getByOrgan(String publicId);
     OrganDto getOrgan(Long unitId);
     int inactivate(Long unitId);
     UnitDto getByPublicId(String publicId);

@@ -62,6 +62,12 @@ public class UnitServiceImpl implements UnitService {
   }
 
   @Override
+  public List<UnitDto> getByOrgan(String publicId) {
+    List<Unit> units = unitRepository.findActiveUnitsByOrgan(publicId);
+    return mapper.toUnitsDto(units);
+  }
+
+  @Override
   public OrganDto getOrgan(Long unitId) {
     Unit unit = repositoriesHandler.getUnitById(unitId);
     return organMapper.toOrganDto(unit.getOrgan());

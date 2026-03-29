@@ -14,6 +14,8 @@ public interface UnitRepository extends CrudRepository<Unit, Long>, PagingAndSor
     List<Unit> findUnitsByOrgan(@Param("organId") Long organId);
     @Query("SELECT u from Unit u where u.organ.id = :organId and u.active")
     List<Unit> findActiveUnitsByOrgan(@Param("organId") Long organId);
+    @Query("SELECT u from Unit u where u.organ.publicId = :organPublicId and u.active")
+    List<Unit> findActiveUnitsByOrgan(@Param("organPublicId") String organPublicId);
     @Query("SELECT u from Unit u where u.organ.id = :organId and u.active = false")
     List<Unit> findInactiveUnitsByOrgan(@Param("organId") Long organId);
     @Query("""

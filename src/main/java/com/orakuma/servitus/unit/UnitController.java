@@ -2,6 +2,7 @@ package com.orakuma.servitus.unit;
 
 import com.orakuma.servitus.organ.OrganDto;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,11 @@ public class UnitController {
 
     @GetMapping
     @ApiResponse(responseCode = "200", description = "List all units or by organisation")
-    public ResponseEntity<List<UnitDto>> getUnitsByOrganisation(@RequestParam(value = "organId", required = false) Long organId) {
+    public ResponseEntity<List<UnitDto>> getUnitsByOrganisation(@RequestParam(value = "publicId", required = false) String publicId) {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(organId == null ? unitService.gets(): unitService.getByOrgan(organId));
+                .body(StringUtils.isBlank(publicId) ? unitService.gets(): unitService.getByOrgan(publicId));
     }
 
     @PostMapping
