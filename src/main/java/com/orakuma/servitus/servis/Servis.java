@@ -65,15 +65,15 @@ public class Servis implements Serializable {
         unit.getServisSet().remove(this);
     }
 
+    public Set<Unit> getUnits() {
+        return Collections.unmodifiableSet(this.units);
+    }
+
     public void setUnits(Set<Unit> units) {
         this.units.clear();
         if (units != null) {
             this.units.forEach(this::addUnit);
         }
-    }
-
-    public Set<Unit> getUnits() {
-        return Collections.unmodifiableSet(this.units);
     }
 
     public Set<DependencyEntity> getDependencies() {

@@ -79,15 +79,6 @@ public class OrganServiceImpl implements OrganService {
     }
   }
 
-  // TODO: temporarily only for already persisted organization without publicId
-  @Override
-  @Transactional
-  public void setOrganPublicId(Long organId) {
-    Organ organ = repositoriesHandler.getOrganById(organId);
-    organ.setPublicId(String.format("org_%s", UUID.randomUUID()));
-    organRepository.save(organ);
-  }
-
   private void makeInactive(Long organId) {
     Organ organ = repositoriesHandler.getOrganById(organId);
     organ.setActive(false);

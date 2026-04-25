@@ -14,78 +14,65 @@ import java.util.Set;
 @RestController
 @RequestMapping("servis")
 public class ServisController {
-    private final ServisService servisService;
+  private final ServisService servisService;
 
-    public ServisController(ServisService servisService) {
-        this.servisService = servisService;
-    }
+  public ServisController(ServisService servisService) {
+    this.servisService = servisService;
+  }
 
-    @GetMapping
-    public ResponseEntity<List<ServisDto>> getAllServis(){
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(servisService.getAll());
-    }
+  @GetMapping
+  public ResponseEntity<List<ServisDto>> getAllServis() {
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(servisService.getAll());
+  }
 
-    @GetMapping("/unit/{unitId}")
-    public ResponseEntity<List<ServisDto>> getAllServisByUnitId(@PathVariable("unitId") Long unitId) {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(servisService.getByUnit(unitId));
-    }
+  @GetMapping("/unit/{unitPublicId}")
+  public ResponseEntity<List<ServisDto>> getAllServisByUnit(
+      @PathVariable("unitPublicId") String unitPublicId) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(servisService.getByUnit(unitPublicId));
+  }
 
-    @PostMapping
-    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
-    public ResponseEntity<ServisDto> addServis(@RequestBody ServisDto servisDto) {
-        return new ResponseEntity<>(servisService.create(servisDto), HttpStatus.CREATED);
-    }
+  @PostMapping
+  @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
+  public ResponseEntity<ServisDto> addServis(@RequestBody ServisDto servisDto) {
+    return new ResponseEntity<>(servisService.create(servisDto), HttpStatus.CREATED);
+  }
 
-    @GetMapping(value = "/internal/{id}")
-    public ResponseEntity<ServisDto> getServisById(@PathVariable("id") Long id) {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(servisService.get(id));
-    }
+  @GetMapping(value = "/internal/{id}")
+  public ResponseEntity<ServisDto> getServisById(@PathVariable("id") Long id) {
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(servisService.get(id));
+  }
 
-    @GetMapping("/publicId")
-    public ResponseEntity<ServisDto> getServisByPublicId(@PathVariable("publicId") String publicId) {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(servisService.getServisByPublicId(publicId));
-    }
+  @GetMapping("/{publicId}")
+  public ResponseEntity<ServisDto> getServisByPublicId(@PathVariable("publicId") String publicId) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(servisService.getServisByPublicId(publicId));
+  }
 
-    @GetMapping("/{id}/dependencies")
-    public ResponseEntity<Set<DependencyDto>> getDependencies(@PathVariable("id") Long id) {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(servisService.getDependenciesForServis(id));
-    }
+  @GetMapping("/{id}/dependencies")
+  public ResponseEntity<Set<DependencyDto>> getDependencies(@PathVariable("id") Long id) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(servisService.getDependenciesForServis(id));
+  }
 
-    @PostMapping("/{id}/dependencies/add")
-    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
-    public ResponseEntity<Void> addDependencies(@PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(servisService.addDependencies(id, dependenciesId));
-    }
+  @PostMapping("/{id}/dependencies/add")
+  @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
+  public ResponseEntity<Void> addDependencies(
+      @PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(servisService.addDependencies(id, dependenciesId));
+  }
 
-    @PostMapping("/{id}/dependencies/remove")
-    @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
-    public ResponseEntity<Void> removeDependencies(@PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(servisService.removeDependencies(id, dependenciesId));
-    }
-
-    @PatchMapping("/set-publicId-manually/{id}")
-    public void updateServisWithPublicId(@PathVariable("id") Long id) {
-        servisService.setServisPublicId(id);
-    }
+  @PostMapping("/{id}/dependencies/remove")
+  @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
+  public ResponseEntity<Void> removeDependencies(
+      @PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(servisService.removeDependencies(id, dependenciesId));
+  }
 }

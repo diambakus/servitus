@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "organ")
+@RequestMapping(value = "organs")
 public class OrganController {
   private final OrganService organService;
 
@@ -56,10 +56,5 @@ public class OrganController {
       responseStatus = HttpStatus.FORBIDDEN;
     }
     return new ResponseEntity<>(inactivatedOrgan, responseStatus);
-  }
-
-  @PatchMapping("/set-publicId-manually/{id}")
-  public void updateOrganWithPublicId(@PathVariable("id") Long id) {
-    organService.setOrganPublicId(id);
   }
 }

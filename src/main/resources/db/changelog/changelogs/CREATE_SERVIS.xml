@@ -19,7 +19,7 @@
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="requester" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="price" type="DECIMAL(10,2)"/>
             <column name="servis_type" type="VARCHAR(50)"/>
@@ -45,31 +45,46 @@
             </column>
             <column name="title" type="VARCHAR(255)"/>
         </createTable>
-        <addPrimaryKey tableName="requisites" columnNames="servis_id, position" />
+        <addPrimaryKey tableName="requisites" columnNames="servis_id, position"/>
     </changeSet>
 
     <changeSet id="4" author="adruida">
-        <renameColumn tableName="servis" oldColumnName="additional_details" newColumnName="description" columnDataType="text"/>
+        <renameColumn tableName="servis" oldColumnName="additional_details" newColumnName="description"
+                      columnDataType="text"/>
     </changeSet>
     <changeSet id="5-delete-column-requester" author="adruida">
-        <dropColumn tableName="servis" columnName="requester" />
+        <dropColumn tableName="servis" columnName="requester"/>
     </changeSet>
     <changeSet id="6-drop-requisites_table" author="adruida" failOnError="false">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="requisites"/>
         </preConditions>
-        <dropForeignKeyConstraint baseTableName="requisites" constraintName="fk_requisites_servis" />
+        <dropForeignKeyConstraint baseTableName="requisites" constraintName="fk_requisites_servis"/>
         <dropTable tableName="requisites" cascadeConstraints="true" schemaName="${schemaName}"/>
     </changeSet>
     <changeSet id="7-publicId" author="adruida">
         <preConditions>
             <not>
-                <columnExists tableName="servis" columnName="public_id" />
+                <columnExists tableName="servis" columnName="public_id"/>
             </not>
         </preConditions>
         <addColumn tableName="servis">
-            <column name="public_id" type="varchar(255)" />
+            <column name="public_id" type="varchar(255)"/>
         </addColumn>
     </changeSet>
-
+    <changeSet id="8-unit-public-id" author="adruida">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists
+                        tableName="units"
+                        constraintName="uk_unit_public_id"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="units" indexName="idx_unit_public_id">
+            <column name="public_id"/>
+        </createIndex>
+        <addUniqueConstraint tableName="units"
+                             columnNames="public_id"
+                             constraintName="uk_unit_public_id"/>
+    </changeSet>
 </databaseChangeLog>

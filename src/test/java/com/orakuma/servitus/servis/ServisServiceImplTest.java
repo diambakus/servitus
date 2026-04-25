@@ -94,15 +94,15 @@ public class ServisServiceImplTest {
         List<Servis> servisList = Collections.singletonList(servis);
         List<ServisDto> servisDtoList = Collections.singletonList(servisDto);
 
-        when(servisRepository.findAllActiveByUnit(1L)).thenReturn(servisList);
+        when(servisRepository.findAllActiveByUnitPublicId("ds-dtr")).thenReturn(servisList);
         when(servisMapper.toServisDtos(servisList)).thenReturn(servisDtoList);
 
-        List<ServisDto> result = servisService.getByUnit(1L);
+        List<ServisDto> result = servisService.getByUnit("ds-dtr");
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(servisDto, result.get(0));
-        verify(servisRepository, times(1)).findAllActiveByUnit(1L);
+        assertEquals(servisDto, result.getFirst());
+        verify(servisRepository, times(1)).findAllActiveByUnitPublicId("ds-dtr");
     }
 
     @Test

@@ -100,15 +100,6 @@ public class UnitServiceImpl implements UnitService {
     }
   }
 
-  // TODO: temporarily only for already persisted organization without publicId
-  @Transactional
-  @Override
-  public void setUnitPublicId(Long id) {
-    Unit unit = repositoriesHandler.getUnitById(id);
-    unit.setPublicId(String.format("unit_%s", UUID.randomUUID()));
-    unitRepository.save(unit);
-  }
-
   private void makeInactive(Long unitId) {
     Unit unit = repositoriesHandler.getUnitById(unitId);
     unit.setActive(false);

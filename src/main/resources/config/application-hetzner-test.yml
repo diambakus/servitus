@@ -1,0 +1,25 @@
+spring:
+  jpa:
+    show-sql: true
+    ddl-auto: none
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: <url>
+    username: <username>
+    password: <pw>
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: <jwk-certs>
+
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger:
+    default-server-url: "/"
