@@ -90,14 +90,14 @@ public class ServisServiceImplTest {
     }
 
     @Test
-    void testGetByUnit() {
+    void testGetByUnitPublicId() {
         List<Servis> servisList = Collections.singletonList(servis);
         List<ServisDto> servisDtoList = Collections.singletonList(servisDto);
 
         when(servisRepository.findAllActiveByUnitPublicId("ds-dtr")).thenReturn(servisList);
         when(servisMapper.toServisDtos(servisList)).thenReturn(servisDtoList);
 
-        List<ServisDto> result = servisService.getByUnit("ds-dtr");
+        List<ServisDto> result = servisService.getByUnitPublicId("ds-dtr");
 
         assertNotNull(result);
         assertEquals(1, result.size());

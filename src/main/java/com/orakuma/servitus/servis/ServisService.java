@@ -12,7 +12,8 @@ public interface ServisService {
     ServisDto create(ServisDto servisDto);
     ServisDto update(Long servisId, Map<String, Object> fields);
     void delete(Long servisId);
-    List<ServisDto> getByUnit(String unitPublicId);
+    List<ServisDto> getByUnitPublicId(String unitPublicId);
+    List<Long> getServicesIdsByUnitId(Long unitId);
     List<ServisDto> getAllActive();
     ServisDto removeUnits(Long servisId, List<Long> unitId);
     Set<DependencyDto> getDependenciesForServis(Long id);

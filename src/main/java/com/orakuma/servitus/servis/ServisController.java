@@ -21,31 +21,38 @@ public class ServisController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ServisDto>> getAllServis() {
+  public ResponseEntity<List<ServisDto>> getAllService() {
     return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(servisService.getAll());
   }
 
   @GetMapping("/unit/{unitPublicId}")
-  public ResponseEntity<List<ServisDto>> getAllServisByUnit(
+  public ResponseEntity<List<ServisDto>> getAllServiceByUnitPublicId(
       @PathVariable("unitPublicId") String unitPublicId) {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(servisService.getByUnit(unitPublicId));
+        .body(servisService.getByUnitPublicId(unitPublicId));
+  }
+
+  @GetMapping("/internal/unit/{unitId}/service-ids")
+  public ResponseEntity<List<Long>> getAllServiceByUnitId(@PathVariable("unitId") Long unitId) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(servisService.getServicesIdsByUnitId(unitId));
   }
 
   @PostMapping
   @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
-  public ResponseEntity<ServisDto> addServis(@RequestBody ServisDto servisDto) {
+  public ResponseEntity<ServisDto> addService(@RequestBody ServisDto servisDto) {
     return new ResponseEntity<>(servisService.create(servisDto), HttpStatus.CREATED);
   }
 
   @GetMapping(value = "/internal/{id}")
-  public ResponseEntity<ServisDto> getServisById(@PathVariable("id") Long id) {
+  public ResponseEntity<ServisDto> getServiceById(@PathVariable("id") Long id) {
     return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(servisService.get(id));
   }
 
   @GetMapping("/{publicId}")
-  public ResponseEntity<ServisDto> getServisByPublicId(@PathVariable("publicId") String publicId) {
+  public ResponseEntity<ServisDto> getServiceByPublicId(@PathVariable("publicId") String publicId) {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
         .body(servisService.getServisByPublicId(publicId));

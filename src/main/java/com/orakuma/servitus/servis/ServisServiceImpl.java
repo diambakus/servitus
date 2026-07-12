@@ -94,9 +94,14 @@ public class ServisServiceImpl implements ServisService {
   public void delete(Long servisId) {}
 
   @Override
-  public List<ServisDto> getByUnit(String unitPublicId) {
+  public List<ServisDto> getByUnitPublicId(String unitPublicId) {
     List<Servis> servisEntityList = servisRepository.findAllActiveByUnitPublicId(unitPublicId);
     return servisMapper.toServisDtos(servisEntityList);
+  }
+
+  @Override
+  public List<Long> getServicesIdsByUnitId(Long unitId) {
+    return servisRepository.findActiveServicesIdsByUnit(unitId);
   }
 
   @Override

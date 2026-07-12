@@ -13,17 +13,17 @@ public interface ServisRepository extends CrudRepository<Servis, Long> {
 
   @Query(
       """
-        select s
+        select distinct s.id
         from Servis s
         inner join s.units u
         where u.id = :unitId
           and s.active
     """)
-  List<Servis> findAllActiveByUnit(@Param("unitId") Long unitId);
+  List<Long> findActiveServicesIdsByUnit(@Param("unitId") Long unitId);
 
   @Query(
 """
-    select s
+    select distinct s
     from Servis s
     join s.units u
     where u.publicId = :publicId
