@@ -67,4 +67,9 @@
                 columnNames="servis_id, dependency_id"
                 constraintName="uk_servis_dependency"/>
     </changeSet>
+    <changeSet id="add-dependency-type" author="adruida (generated)">
+        <addColumn tableName="dependencies">
+            <column name="type" type="varchar(50)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -1,6 +1,3 @@
 package com.orakuma.servitus.dependency;
 
-public record DependencyDto(
-        Long id,
-        String title,
-        Integer position) {}
+public record DependencyDto(Long id, String title, Integer position, DependencyDtoType type) {}

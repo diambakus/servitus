@@ -25,4 +25,6 @@ public class DependencyEntity implements Serializable {
     private Integer position;
     private boolean active;
     private LocalDateTime created;
+    @Enumerated(EnumType.STRING)
+    private DependencyType type;
 }
