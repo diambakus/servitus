@@ -83,4 +83,12 @@
             <column name="public_id" type="varchar(255)" />
         </addColumn>
     </changeSet>
+    <changeSet id="6-units-fk-organ-index" author="adruida">
+        <preConditions onFail="MARK_RAN">
+            <not><indexExists indexName="idx_units_fk_organ" tableName="units" schemaName="${schemaName}"/></not>
+        </preConditions>
+        <createIndex indexName="idx_units_fk_organ" tableName="units" schemaName="${schemaName}">
+            <column name="fk_organ"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

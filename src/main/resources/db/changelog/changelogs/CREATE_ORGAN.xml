@@ -65,4 +65,12 @@
             <column name="public_id" type="varchar(255)" />
         </addColumn>
     </changeSet>
+    <changeSet id="5-organ-indexes" author="adruida">
+        <preConditions onFail="MARK_RAN">
+            <not><indexExists indexName="uk_organs_public_id" tableName="organs" schemaName="${schemaName}"/></not>
+        </preConditions>
+        <createIndex indexName="uk_organs_public_id" tableName="organs" schemaName="${schemaName}" unique="true">
+            <column name="public_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

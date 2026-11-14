@@ -58,6 +58,13 @@ public class ServisController {
         .body(servisService.getServisByPublicId(publicId));
   }
 
+  @DeleteMapping("/{publicId}")
+  @PreAuthorize("hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
+  public ResponseEntity<Void> deleteServis(@PathVariable("publicId") String publicId) {
+    servisService.deleteByPublicId(publicId);
+    return ResponseEntity.noContent().build();
+  }
+
   @GetMapping("/{id}/dependencies")
   public ResponseEntity<Set<DependencyDto>> getDependencies(@PathVariable("id") Long id) {
     return ResponseEntity.ok()

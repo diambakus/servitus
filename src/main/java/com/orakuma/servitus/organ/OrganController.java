@@ -42,6 +42,9 @@ public class OrganController {
   @ApiResponse(responseCode = "200 or 404", description = "Gets organ by publicId")
   public ResponseEntity<OrganDto> getByPublicId(@PathVariable("publicId") String publicId) {
     OrganDto organDto = organService.getOrganByPublicId(publicId);
+    if (organDto == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
     return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(organDto);
   }
 

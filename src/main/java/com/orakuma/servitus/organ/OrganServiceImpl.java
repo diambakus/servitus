@@ -19,8 +19,9 @@ public class OrganServiceImpl implements OrganService {
   private final RepositoriesHandler repositoriesHandler;
 
   @Override
+  @Transactional(readOnly = true)
   public Iterable<OrganDto> gets() {
-    return organMapper.toOrgansDto(organRepository.findAllActive());
+    return organRepository.findAllActiveDtos();
   }
 
   @Override
@@ -46,11 +47,9 @@ public class OrganServiceImpl implements OrganService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Optional<OrganDto> findBy(Long id) {
-    if (organRepository.existsById(id)) {
-      return Optional.ofNullable(organMapper.toOrganDto(organRepository.findById(id).get()));
-    }
-    return Optional.empty();
+    return organRepository.findById(id).map(organMapper::toOrganDto);
   }
 
   @Override
@@ -69,14 +68,9 @@ public class OrganServiceImpl implements OrganService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public OrganDto getOrganByPublicId(String publicId) {
-    try {
-      Organ organ = organRepository.findByPublicId(publicId);
-      return organMapper.toOrganDto(organ);
-    } catch (Exception e) {
-      log.error("Failed to find organization with publicId: {}", publicId);
-      throw new RuntimeException(e);
-    }
+    return organRepository.findDtoByPublicId(publicId).orElse(null);
   }
 
   private void makeInactive(Long organId) {

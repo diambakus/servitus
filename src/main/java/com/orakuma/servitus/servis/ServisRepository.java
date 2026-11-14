@@ -1,5 +1,6 @@
 package com.orakuma.servitus.servis;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -70,6 +71,16 @@ public interface ServisRepository extends CrudRepository<Servis, Long> {
         where s.id = :id
     """)
   Optional<Servis> findWithDependenciesById(@Param("id") Long id);
+
+  /**
+   * Single-statement delete. Rows in servis_unit and servis_dependency are removed by the
+   * ON DELETE CASCADE foreign keys, so no entity loading or collection handling is needed.
+   *
+   * @return number of deleted rows (0 when the publicId does not exist)
+   */
+  @Modifying(flushAutomatically = true, clearAutomatically = true)
+  @Query("delete from Servis s where s.publicId = :publicId")
+  int deleteByPublicId(@Param("publicId") String publicId);
 
   Servis findByPublicId(@Param("publicId") String publicId);
 }

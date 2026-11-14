@@ -1,5 +1,6 @@
 package com.orakuma.servitus.config.exception;
 
+import com.orakuma.servitus.servis.exceptions.ServisNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex) {
         ErrorResponse error = new ErrorResponse("ENTITY_NOT_FOUND", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(ServisNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleServisNotFound(ServisNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse("SERVIS_NOT_FOUND", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 

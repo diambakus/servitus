@@ -6,11 +6,24 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrganRepository extends CrudRepository<Organ, Long> {
     @Query("SELECT o FROM Organ o WHERE o.active = true")
     List<Organ> findAllActive();
+    @Query("""
+        SELECT new com.orakuma.servitus.organ.OrganDto(o.id, o.name, o.description, o.publicId)
+        FROM Organ o
+        WHERE o.active = true
+        """)
+    List<OrganDto> findAllActiveDtos();
+    @Query("""
+        SELECT new com.orakuma.servitus.organ.OrganDto(o.id, o.name, o.description, o.publicId)
+        FROM Organ o
+        WHERE o.publicId = :publicId
+        """)
+    Optional<OrganDto> findDtoByPublicId(@Param("publicId") String publicId);
     @Query("SELECT o FROM Organ o WHERE o.active = false")
     List<Organ> findAllInactive();
     @Query("select count(*) from Unit u where u.organ.id = :organId")

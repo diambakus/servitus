@@ -4,6 +4,7 @@ import com.orakuma.servitus.dependency.DependencyDto;
 import com.orakuma.servitus.dependency.DependencyEntity;
 import com.orakuma.servitus.dependency.DependencyMapper;
 import com.orakuma.servitus.dependency.DependencyRepository;
+import com.orakuma.servitus.servis.exceptions.ServisNotFoundException;
 import com.orakuma.servitus.unit.Unit;
 import com.orakuma.servitus.utils.RepositoriesHandler;
 import lombok.AllArgsConstructor;
@@ -92,6 +93,15 @@ public class ServisServiceImpl implements ServisService {
 
   @Override
   public void delete(Long servisId) {}
+
+  @Override
+  @Transactional
+  public void deleteByPublicId(String publicId) {
+    if (servisRepository.deleteByPublicId(publicId) == 0) {
+      throw new ServisNotFoundException("Servis not found with publicId: " + publicId);
+    }
+    log.info("Deleted servis with publicId: {}", publicId);
+  }
 
   @Override
   public List<ServisDto> getByUnitPublicId(String unitPublicId) {
