@@ -1,7 +1,5 @@
 package com.orakuma.servitus.servis;
 
-import com.orakuma.servitus.dependency.DependencyDto;
-
 import java.util.*;
 
 public interface ServisService {
@@ -17,8 +15,7 @@ public interface ServisService {
     List<Long> getServicesIdsByUnitId(Long unitId);
     List<ServisDto> getAllActive();
     ServisDto removeUnits(Long servisId, List<Long> unitId);
-    Set<DependencyDto> getDependenciesForServis(Long id);
-    Void addDependencies(Long id, LinkedHashSet<Long> dependenciesId);
-    Void removeDependencies(Long id, LinkedHashSet<Long> dependenciesId);
+    Void addDependencies(String publicId, LinkedHashSet<Long> dependenciesId);
+    Void removeDependencies(String publicId, LinkedHashSet<Long> dependenciesId);
     ServisDto getServisByPublicId(String publicId);
 }

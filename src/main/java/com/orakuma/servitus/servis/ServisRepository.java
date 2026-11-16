@@ -72,6 +72,15 @@ public interface ServisRepository extends CrudRepository<Servis, Long> {
     """)
   Optional<Servis> findWithDependenciesById(@Param("id") Long id);
 
+  @Query(
+      """
+        select s
+        from Servis s
+        left join fetch s.dependencies
+        where s.publicId = :publicId
+    """)
+  Optional<Servis> findWithDependenciesByPublicId(@Param("publicId") String publicId);
+
   /**
    * Single-statement delete. Rows in servis_unit and servis_dependency are removed by the
    * ON DELETE CASCADE foreign keys, so no entity loading or collection handling is needed.

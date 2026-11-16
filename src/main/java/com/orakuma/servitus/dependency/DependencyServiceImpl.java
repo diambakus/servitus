@@ -1,13 +1,17 @@
 package com.orakuma.servitus.dependency;
 
+import com.orakuma.servitus.config.CacheConfig;
 import com.orakuma.servitus.servis.Servis;
 import com.orakuma.servitus.servis.ServisRepository;
 import com.orakuma.servitus.utils.RepositoriesHandler;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +40,7 @@ public class DependencyServiceImpl implements DependencyService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheConfig.SERVIS_DEPENDENCIES, allEntries = true)
     public Optional<DependencyDto> update(DependencyDto dependencyDto) {
         DependencyEntity dependencyEntity = dependencyMapper.toEntity(dependencyDto);
         DependencyEntity savedDependency = dependencyRepository.save(dependencyEntity);
@@ -55,6 +60,7 @@ public class DependencyServiceImpl implements DependencyService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheConfig.SERVIS_DEPENDENCIES, allEntries = true)
     public Optional<DependencyDto> deactivate(Long id) {
         DependencyEntity dependency = repositoriesHandler.getDependencyById(id);
         dependency.setActive(false);
@@ -64,7 +70,24 @@ public class DependencyServiceImpl implements DependencyService {
 
     @Override
     public LinkedHashSet<DependencyDto> getDependenciesToAddByServisId(Long id) {
-        Optional<Servis> servis = servisRepository.findWithDependenciesById(id);
+        return getDependenciesToAdd(servisRepository.findWithDependenciesById(id));
+    }
+
+    @Override
+    public LinkedHashSet<DependencyDto> getDependenciesToAddByServisPublicId(String publicId) {
+        return getDependenciesToAdd(servisRepository.findWithDependenciesByPublicId(publicId));
+    }
+
+    @Override
+    @Cacheable(cacheNames = CacheConfig.SERVIS_DEPENDENCIES, key = "#publicId")
+    public Set<DependencyDto> getDependenciesByServisPublicId(String publicId) {
+        LinkedHashSet<DependencyEntity> entities =
+                new LinkedHashSet<>(dependencyRepository.findAllByServisPublicId(publicId));
+        // the instance is shared between callers through the cache, so hand it out read-only
+        return Collections.unmodifiableSet(dependencyMapper.toDto(entities));
+    }
+
+    private LinkedHashSet<DependencyDto> getDependenciesToAdd(Optional<Servis> servis) {
         AtomicReference<LinkedHashSet<DependencyEntity>> dependencyEntitiesAtomicReference = new AtomicReference<>();
         servis.ifPresent(presentServis -> {
             Set<Long> servisDependenciesIds;

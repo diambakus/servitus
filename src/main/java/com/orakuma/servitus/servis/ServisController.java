@@ -1,6 +1,7 @@
 package com.orakuma.servitus.servis;
 
 import com.orakuma.servitus.dependency.DependencyDto;
+import com.orakuma.servitus.dependency.DependencyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,11 @@ import java.util.Set;
 @RequestMapping("servis")
 public class ServisController {
   private final ServisService servisService;
+  private final DependencyService dependencyService;
 
-  public ServisController(ServisService servisService) {
+  public ServisController(ServisService servisService, DependencyService dependencyService) {
     this.servisService = servisService;
+    this.dependencyService = dependencyService;
   }
 
   @GetMapping
@@ -65,28 +68,40 @@ public class ServisController {
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping("/{id}/dependencies")
-  public ResponseEntity<Set<DependencyDto>> getDependencies(@PathVariable("id") Long id) {
+  @GetMapping("/{publicId}/dependencies")
+  public ResponseEntity<Set<DependencyDto>> getDependencies(
+      @PathVariable("publicId") String publicId) {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(servisService.getDependenciesForServis(id));
+        .body(dependencyService.getDependenciesByServisPublicId(publicId));
   }
 
-  @PostMapping("/{id}/dependencies/add")
+  /** Dependencies not yet attached to the servis, i.e. the ones that can still be added. */
+  @GetMapping("/{publicId}/dependencies/available")
+  public ResponseEntity<Set<DependencyDto>> getAvailableDependencies(
+      @PathVariable("publicId") String publicId) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(dependencyService.getDependenciesToAddByServisPublicId(publicId));
+  }
+
+  @PostMapping("/{publicId}/dependencies/add")
   @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
   public ResponseEntity<Void> addDependencies(
-      @PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
+      @PathVariable("publicId") String publicId,
+      @RequestBody LinkedHashSet<Long> dependenciesId) {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(servisService.addDependencies(id, dependenciesId));
+        .body(servisService.addDependencies(publicId, dependenciesId));
   }
 
-  @PostMapping("/{id}/dependencies/remove")
+  @PostMapping("/{publicId}/dependencies/remove")
   @PreAuthorize(value = "hasAnyRole('ADMIN', 'ORGAN_ADMIN')")
   public ResponseEntity<Void> removeDependencies(
-      @PathVariable("id") Long id, @RequestBody LinkedHashSet<Long> dependenciesId) {
+      @PathVariable("publicId") String publicId,
+      @RequestBody LinkedHashSet<Long> dependenciesId) {
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(servisService.removeDependencies(id, dependenciesId));
+        .body(servisService.removeDependencies(publicId, dependenciesId));
   }
 }

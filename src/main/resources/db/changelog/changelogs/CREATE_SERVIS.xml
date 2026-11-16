@@ -87,4 +87,16 @@
                              columnNames="public_id"
                              constraintName="uk_unit_public_id"/>
     </changeSet>
+    <changeSet id="9-servis-public-id-unique" author="adruida">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <uniqueConstraintExists
+                        tableName="servis"
+                        constraintName="uk_servis_public_id"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint tableName="servis"
+                             columnNames="public_id"
+                             constraintName="uk_servis_public_id"/>
+    </changeSet>
 </databaseChangeLog>

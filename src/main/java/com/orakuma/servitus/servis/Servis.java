@@ -70,10 +70,10 @@ public class Servis implements Serializable {
     }
 
     public void setUnits(Set<Unit> units) {
-        this.units.clear();
-        if (units != null) {
-            this.units.forEach(this::addUnit);
-        }
+        // copy first: the argument may be a view of this.units (e.g. the result of getUnits())
+        Set<Unit> newUnits = units == null ? Set.of() : new HashSet<>(units);
+        new HashSet<>(this.units).forEach(this::removeUnit);
+        newUnits.forEach(this::addUnit);
     }
 
     public Set<DependencyEntity> getDependencies() {

@@ -1,14 +1,14 @@
 package com.orakuma.servitus.servis;
 
-import com.orakuma.servitus.dependency.DependencyDto;
+import com.orakuma.servitus.config.CacheConfig;
 import com.orakuma.servitus.dependency.DependencyEntity;
-import com.orakuma.servitus.dependency.DependencyMapper;
 import com.orakuma.servitus.dependency.DependencyRepository;
 import com.orakuma.servitus.servis.exceptions.ServisNotFoundException;
 import com.orakuma.servitus.unit.Unit;
 import com.orakuma.servitus.utils.RepositoriesHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +22,6 @@ public class ServisServiceImpl implements ServisService {
   private final ServisRepository servisRepository;
   private final ServisMapper servisMapper;
   private final RepositoriesHandler repositoriesHandler;
-  private final DependencyMapper dependencyMapper;
   private final DependencyRepository dependencyRepository;
 
   @Override
@@ -96,6 +95,7 @@ public class ServisServiceImpl implements ServisService {
 
   @Override
   @Transactional
+  @CacheEvict(cacheNames = CacheConfig.SERVIS_DEPENDENCIES, key = "#publicId")
   public void deleteByPublicId(String publicId) {
     if (servisRepository.deleteByPublicId(publicId) == 0) {
       throw new ServisNotFoundException("Servis not found with publicId: " + publicId);
@@ -125,18 +125,11 @@ public class ServisServiceImpl implements ServisService {
   }
 
   @Override
-  public Set<DependencyDto> getDependenciesForServis(Long id) {
-    Optional<Servis> servis = servisRepository.findWithDependenciesById(id);
-    LinkedHashSet<DependencyEntity> dependencyEntities = new LinkedHashSet<>();
-    servis.ifPresent(servisEntity -> dependencyEntities.addAll(servisEntity.getDependencies()));
-    return dependencyMapper.toDto(dependencyEntities);
-  }
-
-  @Override
   @Transactional
-  public Void addDependencies(Long id, LinkedHashSet<Long> dependenciesId) {
-    log.info("Adding dependencies for servis: {}", id);
-    Servis servis = repositoriesHandler.getServisById(id);
+  @CacheEvict(cacheNames = CacheConfig.SERVIS_DEPENDENCIES, key = "#publicId")
+  public Void addDependencies(String publicId, LinkedHashSet<Long> dependenciesId) {
+    log.info("Adding dependencies for servis: {}", publicId);
+    Servis servis = getWithDependenciesByPublicId(publicId);
     Iterable<DependencyEntity> chosenDependenciesEntries =
         dependencyRepository.findAllById(dependenciesId);
     for (DependencyEntity dependencyEntity : chosenDependenciesEntries) {
@@ -149,14 +142,22 @@ public class ServisServiceImpl implements ServisService {
 
   @Override
   @Transactional
-  public Void removeDependencies(Long id, LinkedHashSet<Long> dependenciesId) {
-    log.info("Removing dependencies for servis: {}", id);
-    Servis servis = repositoriesHandler.getServisById(id);
+  @CacheEvict(cacheNames = CacheConfig.SERVIS_DEPENDENCIES, key = "#publicId")
+  public Void removeDependencies(String publicId, LinkedHashSet<Long> dependenciesId) {
+    log.info("Removing dependencies for servis: {}", publicId);
+    Servis servis = getWithDependenciesByPublicId(publicId);
     Iterable<DependencyEntity> chosenDependenciesEntries =
         dependencyRepository.findAllById(dependenciesId);
     chosenDependenciesEntries.forEach(servis::removeDependency);
     servisRepository.save(servis);
     return null;
+  }
+
+  private Servis getWithDependenciesByPublicId(String publicId) {
+    return servisRepository
+        .findWithDependenciesByPublicId(publicId)
+        .orElseThrow(
+            () -> new ServisNotFoundException("Servis not found with publicId: " + publicId));
   }
 
   @Override

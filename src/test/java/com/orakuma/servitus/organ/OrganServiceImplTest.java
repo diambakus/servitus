@@ -40,15 +40,15 @@ public class OrganServiceImplTest {
 
     @Test
     void testGets() {
-        List<Organ> activeOrgans = Collections.singletonList(organ);
-        when(organRepository.findAllActive()).thenReturn(activeOrgans);
-        when(organMapper.toOrgansDto(activeOrgans)).thenReturn(Collections.singletonList(organDto));
+        when(organRepository.findAllActiveDtos()).thenReturn(Collections.singletonList(organDto));
 
         Iterable<OrganDto> result = organService.gets();
 
         assertNotNull(result);
         assertEquals(1, ((Collection<?>) result).size());
-        verify(organRepository, times(1)).findAllActive();
+        assertEquals(organDto, result.iterator().next());
+        verify(organRepository, times(1)).findAllActiveDtos();
+        verifyNoInteractions(organMapper);
     }
 
     @Test
@@ -94,7 +94,6 @@ public class OrganServiceImplTest {
 
     @Test
     void testFindBy_OrganExists() {
-        when(organRepository.existsById(1L)).thenReturn(true);
         when(organRepository.findById(1L)).thenReturn(Optional.of(organ));
         when(organMapper.toOrganDto(organ)).thenReturn(organDto);
 
@@ -107,12 +106,13 @@ public class OrganServiceImplTest {
 
     @Test
     void testFindBy_OrganDoesNotExist() {
-        when(organRepository.existsById(1L)).thenReturn(false);
+        when(organRepository.findById(1L)).thenReturn(Optional.empty());
 
         Optional<OrganDto> result = organService.findBy(1L);
 
         assertFalse(result.isPresent());
-        verify(organRepository, times(0)).findById(1L);
+        verify(organRepository, times(1)).findById(1L);
+        verifyNoInteractions(organMapper);
     }
 
     @Test
